@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TpBlockchainPW3.Web.Data;
+using TpBlockchainPW3.Web.Services;
+using TpBlockchainPW3.Web.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,3 +46,7 @@ app.MapRazorPages()
    .WithStaticAssets();
 
 app.Run();
+
+builder.Services.AddSingleton<IHashService, Sha256HashService>();
+builder.Services.AddSingleton<IBlockchainService, BlockchainFalsoService>();   // TEMPORAL hasta T09
+builder.Services.AddScoped<IDocumentoService, DocumentoService>();

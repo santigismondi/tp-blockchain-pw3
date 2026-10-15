@@ -27,9 +27,11 @@ public class Documento
 
     public decimal? Nota { get; set; }
 
-    // Archivo y huella
-    [Required, MaxLength(260)]
-    public string RutaArchivo { get; set; } = string.Empty;
+    [Required]
+    public byte[] Contenido { get; set; } = [];   // el archivo completo (varbinary(max) en SQL)
+
+    [Required, MaxLength(100)]
+    public string NombreArchivo { get; set; } = string.Empty;   // ej. "certificado.pdf"
 
     [Required, MaxLength(64)]   // SHA-256 en hexadecimal = 64 caracteres
     public string HashSha256 { get; set; } = string.Empty;
