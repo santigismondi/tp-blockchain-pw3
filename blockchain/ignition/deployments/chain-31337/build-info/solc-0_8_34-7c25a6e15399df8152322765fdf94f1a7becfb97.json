@@ -1,0 +1,49 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_34-7c25a6e15399df8152322765fdf94f1a7becfb97",
+  "solcVersion": "0.8.34",
+  "solcLongVersion": "0.8.34+commit.80d5c536",
+  "compilerType": "solc",
+  "toolVersions": {
+    "hardhat": "3.20.0"
+  },
+  "userSourceNameMap": {
+    "contracts/Notaria.sol": "project/contracts/Notaria.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "osaka",
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode.linkReferences",
+            "evm.bytecode.object",
+            "evm.bytecode.opcodes",
+            "evm.bytecode.sourceMap",
+            "evm.deployedBytecode.immutableReferences",
+            "evm.deployedBytecode.linkReferences",
+            "evm.deployedBytecode.object",
+            "evm.deployedBytecode.opcodes",
+            "evm.deployedBytecode.sourceMap",
+            "evm.methodIdentifiers"
+          ]
+        }
+      },
+      "remappings": []
+    },
+    "sources": {
+      "project/contracts/Notaria.sol": {
+        "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.20;\n\ncontract Notaria {\n    struct Registro { address emisor; uint256 fecha; }\n\n    mapping(bytes32 => Registro) private registros;\n\n    event DocumentoRegistrado(bytes32 indexed hash, address indexed emisor, uint256 fecha);\n\n    function registrar(bytes32 hash) external {\n        require(registros[hash].fecha == 0, \"Ya registrado\");\n        registros[hash] = Registro(msg.sender, block.timestamp);\n        emit DocumentoRegistrado(hash, msg.sender, block.timestamp);\n    }\n\n    function verificar(bytes32 hash) external view returns (bool existe, address emisor, uint256 fecha) {\n        Registro memory r = registros[hash];\n        return (r.fecha != 0, r.emisor, r.fecha);\n    }\n}"
+      }
+    }
+  }
+}
