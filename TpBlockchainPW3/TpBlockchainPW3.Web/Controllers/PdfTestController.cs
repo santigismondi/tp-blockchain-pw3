@@ -20,10 +20,10 @@ namespace TpBlockchainPW3.Web.Controllers
         {
             var sampleData = new CertificateModel
             {
-                FullName = "Ignacio Pascale",
+                FullName = "Juan Perez",
                 Dni = "40123456",
                 Subject = "Programación Web III",
-                Grade = "10 (Diez)",
+                Grade = "8 (ocho)",
                 Date = DateTime.Now,
                 Code = "CERT-2026-TEST-XYZ"
             };
