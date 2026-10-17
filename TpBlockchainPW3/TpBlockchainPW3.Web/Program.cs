@@ -16,6 +16,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IPdfService, QuestPdfService>();
+builder.Services.AddSingleton<IHashService, Sha256HashService>();
+builder.Services.AddSingleton<IBlockchainService, BlockchainFalsoService>();   // TEMPORAL hasta T09
+builder.Services.AddScoped<IDocumentoService, DocumentoService>();
 
 var app = builder.Build();
 
@@ -48,6 +51,3 @@ app.MapRazorPages()
 
 app.Run();
 
-builder.Services.AddSingleton<IHashService, Sha256HashService>();
-builder.Services.AddSingleton<IBlockchainService, BlockchainFalsoService>();   // TEMPORAL hasta T09
-builder.Services.AddScoped<IDocumentoService, DocumentoService>();
