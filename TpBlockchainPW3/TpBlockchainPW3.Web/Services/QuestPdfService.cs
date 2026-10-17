@@ -11,6 +11,7 @@ namespace TpBlockchainPW3.Web.Services
         public byte[] GenerateCertificate(CertificateModel data)
         {
             QuestPDF.Settings.License = LicenseType.Community;
+            QuestPDF.Settings.UseSystemFonts = true;
 
             var document = Document.Create(container =>
             {
@@ -19,7 +20,7 @@ namespace TpBlockchainPW3.Web.Services
                     page.Size(PageSizes.A4);
                     page.Margin(2, Unit.Centimetre);
                     page.PageColor(Colors.White);
-                    page.DefaultTextStyle(x => x.FontSize(12).FontFamily(Fonts.Courier));
+                    page.DefaultTextStyle(x => x.FontSize(12).FontFamily(Fonts.Arial));
 
                     // Lineas de estilos para darle forma al Certificado. Chequear.
                     // Encabezado
@@ -92,6 +93,7 @@ namespace TpBlockchainPW3.Web.Services
                 });
             });
 
+            
             return document.GeneratePdf();
         }
     }

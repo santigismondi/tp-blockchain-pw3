@@ -4,6 +4,8 @@ using TpBlockchainPW3.Web.Services.Interfaces;
 
 namespace TpBlockchainPW3.Web.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class PdfTestController : ControllerBase
     {
         private readonly IPdfService _pdfService;
