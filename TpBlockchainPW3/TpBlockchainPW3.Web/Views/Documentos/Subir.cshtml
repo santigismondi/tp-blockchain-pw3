@@ -1,0 +1,59 @@
+﻿@model TpBlockchainPW3.Web.Models.SubirDocumentoModel
+
+@{
+    ViewData["Title"] = "Subir Documento";
+}
+
+<div class="container mt-4">
+    <h2>Registrar Nuevo Documento</h2>
+    <hr />
+
+    <form asp-action="Subir" method="post" enctype="multipart/form-data" id="formSubirDoc">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="mb-3">
+            <label asp-for="Titulo" class="form-label"></label>
+            <input asp-for="Titulo" class="form-control" placeholder="Ej: Titulo Secundario" />
+            <span asp-validation-for="Titulo" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Tipo" class="form-label"></label>
+            <select asp-for="Tipo" class="form-select" asp-items="Html.GetEnumSelectList<TpBlockchainPW3.Web.Models.TipoDocumento>()"></select>
+            <span asp-validation-for="Tipo" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Archivo" class="form-label"></label>
+            <input asp-for="Archivo" type="file" class="form-control" />
+            <span asp-validation-for="Archivo" class="text-danger"></span>
+            <small class="text-muted">Tamaño máximo permitido: 10 MB.</small>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" id="btnSubmit" class="btn btn-primary">Registrar</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </div>
+
+        <div id="alertaProcesando" class="alert alert-warning d-none mt-3 shadow-sm" role="alert">
+            <div class="d-flex align-items-center">
+                <div class="spinner-border spinner-border-sm me-3" role="status"></div>
+                <div>
+                    <strong>Registrando en la Blockchain...</strong> Esto puede tardar unos segundos. Por favor, no cierre ni recargue la página.
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById('formSubirDoc').addEventListener('submit', function (e) {
+            if ($(this).valid()) {
+                document.getElementById('btnSubmit').disabled = true;
+                document.getElementById('alertaProcesando').classList.remove('d-none');
+            }
+        });
+    </script>
+}
