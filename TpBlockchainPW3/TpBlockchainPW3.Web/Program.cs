@@ -48,5 +48,5 @@ app.MapRazorPages()
 app.Run();
 
 builder.Services.AddSingleton<IHashService, Sha256HashService>();
-builder.Services.AddSingleton<IBlockchainService, BlockchainFalsoService>();   // TEMPORAL hasta T09
+builder.Services.AddSingleton<IBlockchainService, NethereumBlockchainService>();
 builder.Services.AddScoped<IDocumentoService, DocumentoService>();

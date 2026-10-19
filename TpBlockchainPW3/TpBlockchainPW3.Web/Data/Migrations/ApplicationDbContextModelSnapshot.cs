@@ -237,6 +237,10 @@ namespace TpBlockchainPW3.Web.Data.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<byte[]>("Contenido")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("DniDestinatario")
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
@@ -263,6 +267,11 @@ namespace TpBlockchainPW3.Web.Data.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<string>("NombreArchivo")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("NombreDestinatario")
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
@@ -270,11 +279,6 @@ namespace TpBlockchainPW3.Web.Data.Migrations
                     b.Property<decimal?>("Nota")
                         .HasPrecision(4, 2)
                         .HasColumnType("decimal(4,2)");
-
-                    b.Property<string>("RutaArchivo")
-                        .IsRequired()
-                        .HasMaxLength(260)
-                        .HasColumnType("nvarchar(260)");
 
                     b.Property<int>("Tipo")
                         .HasColumnType("int");
