@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TpBlockchainPW3.Web.Data;
 using TpBlockchainPW3.Web.Services;
 using TpBlockchainPW3.Web.Services.Interfaces;
+using TpBlockchainPW3.Web.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,3 +51,4 @@ app.Run();
 builder.Services.AddSingleton<IHashService, Sha256HashService>();
 builder.Services.AddSingleton<IBlockchainService, NethereumBlockchainService>();
 builder.Services.AddScoped<IDocumentoService, DocumentoService>();
+builder.Services.Configure<BlockchainOptions>(builder.Configuration.GetSection(BlockchainOptions.Seccion));
