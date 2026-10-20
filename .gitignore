@@ -115,3 +115,10 @@ x86/
 # Publish Web Output
 *.[Pp]ublish.xml
 TpBlockchainPW3/.idea
+
+# Hardhat / Ignition
+blockchain/node_modules/
+blockchain/artifacts/
+blockchain/cache/
+blockchain/types/
+blockchain/ignition/deployments/chain-31337/
