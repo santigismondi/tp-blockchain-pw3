@@ -17,6 +17,11 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+builder.Services.Configure<BlockchainOptions>(builder.Configuration.GetSection(BlockchainOptions.Seccion));
+builder.Services.AddSingleton<IHashService, Sha256HashService>();
+builder.Services.AddSingleton<IBlockchainService, NethereumBlockchainService>();
+builder.Services.AddScoped<IDocumentoService, DocumentoService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -47,8 +52,3 @@ app.MapRazorPages()
    .WithStaticAssets();
 
 app.Run();
-
-builder.Services.AddSingleton<IHashService, Sha256HashService>();
-builder.Services.AddSingleton<IBlockchainService, NethereumBlockchainService>();
-builder.Services.AddScoped<IDocumentoService, DocumentoService>();
-builder.Services.Configure<BlockchainOptions>(builder.Configuration.GetSection(BlockchainOptions.Seccion));

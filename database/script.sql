@@ -253,3 +253,46 @@ END;
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261015235839_GuardarArchivoEnBase'
+)
+BEGIN
+    DECLARE @var nvarchar(max);
+    SELECT @var = QUOTENAME([d].[name])
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Documentos]') AND [c].[name] = N'RutaArchivo');
+    IF @var IS NOT NULL EXEC(N'ALTER TABLE [Documentos] DROP CONSTRAINT ' + @var + ';');
+    ALTER TABLE [Documentos] DROP COLUMN [RutaArchivo];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261015235839_GuardarArchivoEnBase'
+)
+BEGIN
+    ALTER TABLE [Documentos] ADD [Contenido] varbinary(max) NOT NULL DEFAULT 0x;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261015235839_GuardarArchivoEnBase'
+)
+BEGIN
+    ALTER TABLE [Documentos] ADD [NombreArchivo] nvarchar(100) NOT NULL DEFAULT N'';
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261015235839_GuardarArchivoEnBase'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20261015235839_GuardarArchivoEnBase', N'10.0.11');
+END;
+
+COMMIT;
+GO
+
