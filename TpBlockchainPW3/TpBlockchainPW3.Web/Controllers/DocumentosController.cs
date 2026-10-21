@@ -10,9 +10,11 @@ namespace TpBlockchainPW3.Web.Controllers
     public class DocumentosController : Controller
     {
         private readonly IDocumentoService _documentoService;
-        public DocumentosController(IDocumentoService documentoService)
+        private readonly IPdfService _pdfService;
+        public DocumentosController(IDocumentoService documentoService, IPdfService pdfService)
         {
             _documentoService = documentoService;
+            _pdfService = pdfService;
         }
 
         [HttpGet]
@@ -77,6 +79,33 @@ namespace TpBlockchainPW3.Web.Controllers
             TempData["MensajeExito"] = resultado.Mensaje;
 
             return RedirectToAction("Detalle", new { id = resultado.Documento!.Id });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GenerarCertificado(int id)
+        {
+            var emisorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(emisorId)) return Unauthorized();
+
+            var documento = await _documentoService.ObtenerAsync(id, emisorId);
+            if (documento == null)
+            {
+                return NotFound();
+            }
+
+            var certModel = new CertificateModel
+            {
+                FullName = documento.NombreDestinatario ?? "No especificado",
+                Dni = documento.DniDestinatario ?? "No especificado",
+                Subject = documento.Materia ?? documento.Titulo,
+                Grade = documento.Nota?.ToString() ?? "Aprobado",
+                Date = documento.FechaRegistro ?? documento.FechaCreacion,
+                Code = documento.Codigo
+            };
+
+            var pdfBytes = _pdfService.GenerateCertificate(certModel);
+
+            return File(pdfBytes, "application/pdf", $"Certificado_{documento.Codigo}.pdf");
         }
 
         [HttpGet]
