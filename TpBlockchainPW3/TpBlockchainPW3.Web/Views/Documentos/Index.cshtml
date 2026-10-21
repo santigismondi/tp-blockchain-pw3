@@ -1,0 +1,61 @@
+﻿@model IEnumerable<TpBlockchainPW3.Web.Models.Documento>
+
+@{
+    ViewData["Title"] = "Mis Documentos";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Mis Documentos Registrados</h2>
+        <div>
+            <a asp-action="Subir" class="btn btn-primary">Subir documento</a>
+        </div>
+    </div>
+    <hr />
+
+    @if (TempData["MensajeExito"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["MensajeExito"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <table class="table table-striped table-hover shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>Título</th>
+                <th>Código</th>
+                <th>Fecha de Creación</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">No tenés documentos registrados todavía.</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Titulo</td>
+                        <td><code>@item.Codigo</code></td>
+                        <td>@item.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            <partial name="_EstadoBadge" model="item.Estado" />
+                        </td>
+                        <td>
+                            <a asp-action="Detalle" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white">Ver Detalle</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+

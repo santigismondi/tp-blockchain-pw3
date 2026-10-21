@@ -1,0 +1,17 @@
+﻿@model TpBlockchainPW3.Web.Models.EstadoDocumento
+
+@switch (Model)
+{
+    case TpBlockchainPW3.Web.Models.EstadoDocumento.Registrado:
+        <span class="badge bg-success">Registrado</span>
+        break;
+    case TpBlockchainPW3.Web.Models.EstadoDocumento.Pendiente:
+        <span class="badge bg-warning text-dark">Pendiente</span>
+        break;
+    case TpBlockchainPW3.Web.Models.EstadoDocumento.Error:
+        <span class="badge bg-danger">Error</span>
+        break;
+    default:
+        <span class="badge bg-secondary">Desconocido</span>
+        break;
+}
