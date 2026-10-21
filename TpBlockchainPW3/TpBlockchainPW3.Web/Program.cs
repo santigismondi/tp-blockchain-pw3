@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TpBlockchainPW3.Web.Data;
 using TpBlockchainPW3.Web.Services;
 using TpBlockchainPW3.Web.Services.Interfaces;
+using TpBlockchainPW3.Web.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,9 +16,11 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddScoped<IPdfService, QuestPdfService>();
+builder.Services.Configure<BlockchainOptions>(builder.Configuration.GetSection(BlockchainOptions.Seccion));
 builder.Services.AddSingleton<IHashService, Sha256HashService>();
-builder.Services.AddSingleton<IBlockchainService, BlockchainFalsoService>();   // TEMPORAL hasta T09
+builder.Services.AddSingleton<IBlockchainService, NethereumBlockchainService>();
 builder.Services.AddScoped<IDocumentoService, DocumentoService>();
 
 var app = builder.Build();
@@ -52,4 +55,3 @@ app.MapRazorPages()
    .WithStaticAssets();
 
 app.Run();
-
