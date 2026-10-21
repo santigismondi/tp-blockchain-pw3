@@ -29,15 +29,15 @@ Aplicación web ASP.NET Core MVC que permite **registrar documentos en una block
 
 Instalá lo siguiente **antes** de clonar el proyecto:
 
-| Herramienta | Versión | Para qué |
-|---|---|---|
-| [Visual Studio 2026](https://visualstudio.microsoft.com/) (Community alcanza) | Con soporte para .NET 10 | Editor e IDE |
-| Carga de trabajo **"Desarrollo de ASP.NET y web"** | — | Se elige en el Visual Studio Installer |
-| [SDK de .NET 10](https://dotnet.microsoft.com/download/dotnet/10.0) | 10.0.x | Compilar y ejecutar el proyecto |
-| **SQL Server Express LocalDB** | — | Base de datos local (solo Windows) |
-| [Node.js](https://nodejs.org/) (versión LTS) | **22.13 o superior** | Ejecutar Hardhat, la blockchain local |
-| [Git](https://git-scm.com/) (y opcionalmente [Fork](https://git-fork.com/)) | — | Control de versiones |
-| [SQL Server Management Studio](https://learn.microsoft.com/sql/ssms/download-sql-server-management-studio-ssms) | Opcional | Ver la base de datos fuera de Visual Studio |
+| Herramienta                                                                                                     | Versión                  | Para qué                                    |
+| --------------------------------------------------------------------------------------------------------------- | ------------------------ | ------------------------------------------- |
+| [Visual Studio 2026](https://visualstudio.microsoft.com/) (Community alcanza)                                   | Con soporte para .NET 10 | Editor e IDE                                |
+| Carga de trabajo **"Desarrollo de ASP.NET y web"**                                                              | —                        | Se elige en el Visual Studio Installer      |
+| [SDK de .NET 10](https://dotnet.microsoft.com/download/dotnet/10.0)                                             | 10.0.x                   | Compilar y ejecutar el proyecto             |
+| **SQL Server Express LocalDB**                                                                                  | —                        | Base de datos local (solo Windows)          |
+| [Node.js](https://nodejs.org/) (versión LTS)                                                                    | **22.13 o superior**     | Ejecutar Hardhat, la blockchain local       |
+| [Git](https://git-scm.com/) (y opcionalmente [Fork](https://git-fork.com/))                                     | —                        | Control de versiones                        |
+| [SQL Server Management Studio](https://learn.microsoft.com/sql/ssms/download-sql-server-management-studio-ssms) | Opcional                 | Ver la base de datos fuera de Visual Studio |
 
 ### Cómo verificar que está todo
 
@@ -198,12 +198,12 @@ Está en `TpBlockchainPW3.Web/appsettings.json`:
 
 **Desde SQL Server Management Studio (SSMS):**
 
-| Campo | Valor |
-|---|---|
-| Tipo de servidor | Motor de base de datos |
-| Nombre del servidor | `(localdb)\MSSQLLocalDB` |
-| Autenticación | Autenticación de Windows |
-| Cifrado | Opcional, o tildá "Confiar en el certificado del servidor" |
+| Campo               | Valor                                                      |
+| ------------------- | ---------------------------------------------------------- |
+| Tipo de servidor    | Motor de base de datos                                     |
+| Nombre del servidor | `(localdb)\MSSQLLocalDB`                                   |
+| Autenticación       | Autenticación de Windows                                   |
+| Cifrado             | Opcional, o tildá "Confiar en el certificado del servidor" |
 
 ### 5.5 (Opcional) Usar otra instancia de SQL Server
 
@@ -278,7 +278,7 @@ npm install
 > ⚠️ **Todos los comandos `npx hardhat ...` se ejecutan dentro de `blockchain/`.** Antes de correrlos, revisá que el prompt termine en `blockchain`. Si estás en otra carpeta, Hardhat responde `Error HHE3: No Hardhat config file found`.
 
 > 🪟 **Windows / PowerShell:** si `npx` muestra un error de "la ejecución de scripts está deshabilitada", corré una sola vez:
->
+> 
 > ```powershell
 > Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 > ```
@@ -339,11 +339,11 @@ La `PrivateKey` copiala de la terminal de `npx hardhat node`, en la línea `Priv
 
 ### 6.5 Rutina de cada día
 
-| Paso | Terminal | Comando |
-|---|---|---|
-| 1 | Terminal 1, en `blockchain/` | `npx hardhat node` (y dejarla abierta) |
-| 2 | Terminal 2, en `blockchain/` | `npx hardhat ignition deploy ignition/modules/Notaria.ts --network localhost` |
-| 3 | Visual Studio / Rider | Ejecutar la app (F5) |
+| Paso | Terminal                     | Comando                                                                       |
+| ---- | ---------------------------- | ----------------------------------------------------------------------------- |
+| 1    | Terminal 1, en `blockchain/` | `npx hardhat node` (y dejarla abierta)                                        |
+| 2    | Terminal 2, en `blockchain/` | `npx hardhat ignition deploy ignition/modules/Notaria.ts --network localhost` |
+| 3    | Visual Studio / Rider        | Ejecutar la app (F5)                                                          |
 
 Como la red se borra al cerrarla, **cada vez que vuelvas a abrir la red tenés que repetir el paso 2**. Los documentos que estaban registrados en tu base como *Registrado* ya no existen en la red nueva: para la verificación hay que registrarlos de nuevo.
 
@@ -403,6 +403,7 @@ dotnet ef migrations script --idempotent -o ..\..\database\script.sql
 Commiteá **juntos** el cambio en el modelo, la migración generada y el script actualizado.
 
 > ⚠️ **Reglas para no romperle la base a nadie:**
+> 
 > - Nunca edites ni borres una migración que ya está en `main`.
 > - Si dos personas crean migraciones al mismo tiempo, coordinen quién mergea primero; el otro hace `git pull` y vuelve a generar la suya.
 > - Si te equivocaste en una migración que **todavía no subiste**, podés deshacerla con `dotnet ef migrations remove`.
@@ -423,7 +424,7 @@ Commiteá **juntos** el cambio en el modelo, la migración generada y el script 
 4. Volvé a correr `dotnet ef database update`.
 
 > ⚠️ Leé el aviso de Windows antes de desactivarlo: en algunas versiones de Windows 11 no se puede volver a activar sin reinstalar el sistema. El antivirus (Microsoft Defender) sigue funcionando igual.
->
+> 
 > Si la computadora es del trabajo o de una institución y no podés cambiar esta opción, pedile al área de sistemas una excepción para la carpeta `source\repos`. Si usás un antivirus de terceros, agregá una exclusión para esa carpeta.
 
 ### ❌ `Update-Database` falla con `ErrorActionPreference ... RemoteException`
@@ -508,32 +509,60 @@ Y volvé a stagear. **Nunca subas** `.vs/`, `bin/` ni `obj/`.
 
 Algunas herramientas fallan con rutas como `C:\Users\...\Programación\...`. Mové el repo a una ruta simple, como `C:\Repos\tp-blockchain-pw3`.
 
+
+
+### ❌ El documento no se registra correctamente
+
+Debes correr hardhat antes de compilar la app
+
+Abri dos terminales
+
+Terminal 1 (dejala abierta) 
+
+```bash
+cd C:\Users\santi\source\repos\tp-blockchain-pw3\blockchain 
+npx hardhat node
+```
+
+
+
+Terminal 2 
+
+```bash
+cd C:\Users\santi\source\repos\tp-blockchain-pw3\blockchain 
+npx hardhat ignition deploy ignition/modules/Notaria.ts --network localhost
+```
+
+
+
 ---
 
 ## 11. Flujo de trabajo con Git
 
 - **Nunca trabajar directo sobre `main`.** Creá una rama por funcionalidad:
-
+  
   ```powershell
   git checkout main
   git pull
   git checkout -b feature/nombre-de-la-funcionalidad
   ```
-
+  
   Ejemplos: `feature/modelo-documento`, `feature/blockchain-service`, `feature/verificacion`.
 
 - Al terminar, subí la rama y abrí un **Pull Request** hacia `main` en GitHub para que otro integrante lo revise.
+
 - Después de que se mergea un PR, todos hacen `git pull` en `main` y, si hay migraciones nuevas, `dotnet ef database update`. Si cambió `blockchain/package.json`, también `npm install` dentro de `blockchain/`.
+
 - Git **no registra carpetas vacías**: una carpeta nueva aparece en el repo recién cuando tiene al menos un archivo.
 
 ### Qué NO se sube al repositorio
 
-| Qué | Por qué |
-|---|---|
-| `.vs/`, `.idea/`, `bin/`, `obj/` | Archivos locales y de compilación; los regeneran Visual Studio y Rider |
+| Qué                                                                      | Por qué                                                                                     |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| `.vs/`, `.idea/`, `bin/`, `obj/`                                         | Archivos locales y de compilación; los regeneran Visual Studio y Rider                      |
 | `blockchain/node_modules/`, `blockchain/artifacts/`, `blockchain/cache/` | Dependencias y archivos compilados de Hardhat; se regeneran con `npm install` y al compilar |
-| `blockchain/ignition/deployments/chain-31337/` | Registro de la publicación en **tu** red local; no sirve en otra computadora |
-| Claves privadas, API keys, cadenas de conexión personales | Seguridad: van en User Secrets |
+| `blockchain/ignition/deployments/chain-31337/`                           | Registro de la publicación en **tu** red local; no sirve en otra computadora                |
+| Claves privadas, API keys, cadenas de conexión personales                | Seguridad: van en User Secrets                                                              |
 
 > Revisá en Fork que nada de esto aparezca antes de commitear. Si `chain-31337` aparece, agregá la línea `ignition/deployments/chain-31337` al `.gitignore` de `blockchain/`.
 
@@ -550,16 +579,16 @@ Con la red local, los valores son públicos y los mismos para todos. Si algún d
 
 ## 12. Tecnologías
 
-| Tecnología | Uso |
-|---|---|
-| ASP.NET Core MVC (.NET 10) | Aplicación web |
-| ASP.NET Core Identity | Registro e inicio de sesión |
+| Tecnología                                    | Uso                                                  |
+| --------------------------------------------- | ---------------------------------------------------- |
+| ASP.NET Core MVC (.NET 10)                    | Aplicación web                                       |
+| ASP.NET Core Identity                         | Registro e inicio de sesión                          |
 | Entity Framework Core 10 + SQL Server LocalDB | Base de datos (enfoque *code-first* con migraciones) |
-| Bootstrap | Interfaz de usuario |
-| Hardhat 3 (Node.js) | Blockchain local para desarrollo y demo |
-| Solidity | Contrato inteligente de notarización |
-| Nethereum | Comunicación desde C# con la blockchain |
-| QuestPDF / QRCoder | Generación de certificados PDF y códigos QR |
+| Bootstrap                                     | Interfaz de usuario                                  |
+| Hardhat 3 (Node.js)                           | Blockchain local para desarrollo y demo              |
+| Solidity                                      | Contrato inteligente de notarización                 |
+| Nethereum                                     | Comunicación desde C# con la blockchain              |
+| QuestPDF / QRCoder                            | Generación de certificados PDF y códigos QR          |
 
 ---
 
