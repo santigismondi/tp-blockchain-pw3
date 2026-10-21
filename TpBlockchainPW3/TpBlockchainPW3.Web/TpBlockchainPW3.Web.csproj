@@ -14,9 +14,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.11" PrivateAssets="all" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.11" />
-<<<<<<< HEAD
     <PackageReference Include="QuestPDF" Version="2026.9.1" />
-=======
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
     <PackageReference Include="Nethereum.Web3" Version="7.0.0" />
   </ItemGroup>
@@ -26,7 +24,6 @@
     <Folder Include="Storage\" />
     <Folder Include="Options\" />
     <Folder Include="ViewModels\" />
->>>>>>> 4b53c6b62d7bc51fc453b815d4b2ca94735653e0
   </ItemGroup>
 
 </Project>
