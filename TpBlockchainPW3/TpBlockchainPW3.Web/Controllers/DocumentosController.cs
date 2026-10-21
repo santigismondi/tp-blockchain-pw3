@@ -16,6 +16,16 @@ namespace TpBlockchainPW3.Web.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var emisorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(emisorId)) return Unauthorized();
+
+            var documentos = await _documentoService.ListarPorEmisorAsync(emisorId);
+            return View(documentos);
+        }
+
+        [HttpGet]
         public IActionResult Subir()
         {
             return View(new SubirDocumentoModel());
