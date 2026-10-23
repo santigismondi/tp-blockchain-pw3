@@ -95,11 +95,11 @@ namespace TpBlockchainPW3.Web.Controllers
 
             var certModel = new CertificateModel
             {
-                FullName = documento.NombreDestinatario ?? "No especificado",
-                Dni = documento.DniDestinatario ?? "No especificado",
-                Subject = documento.Materia ?? documento.Titulo,
+                FullName = documento.Titulo,
+                Dni = "---",
+                Subject = documento.Titulo,
                 Grade = documento.Nota?.ToString() ?? "Aprobado",
-                Date = documento.FechaRegistro ?? documento.FechaCreacion,
+                Date = documento.FechaCreacion,
                 Code = documento.Codigo
             };
 
@@ -122,5 +122,25 @@ namespace TpBlockchainPW3.Web.Controllers
 
             return View(documento);
         }
-      }
+
+        [HttpGet]
+        public async Task<IActionResult> Descargar(int id)
+        {
+            var emisorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(emisorId)) return Unauthorized();
+
+            var documento = await _documentoService.ObtenerAsync(id, emisorId);
+            if (documento == null)
+            {
+                return NotFound();
+            }
+
+            if (documento.Contenido == null || documento.Contenido.Length == 0)
+            {
+                return NotFound("El archivo no contiene datos almacenados.");
+            }
+
+            return File(documento.Contenido, "application/octet-stream", documento.NombreArchivo ?? $"documento_{documento.Codigo}.dat");
+        }
+       }
     }
