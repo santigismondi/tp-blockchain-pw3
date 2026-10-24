@@ -1,0 +1,28 @@
+@model TpBlockchainPW3.Web.Models.ResultadoVerificacion
+@{
+    ViewData["Title"] = "Resultado de la verificación";
+}
+
+@if (Model.Autentico)
+{
+    <div class="alert alert-success">
+        <strong>✅ Documento auténtico.</strong>
+        Registrado en la blockchain el @Model.FechaBlockchain?.ToLocalTime().ToString("dd/MM/yyyy HH:mm").
+    </div>
+
+    @if (Model.Documento is not null)
+    {
+        <p><strong>Código:</strong> @Model.Documento.Codigo</p>
+        <p><strong>Título:</strong> @Model.Documento.Titulo</p>
+    }
+}
+else
+{
+    <div class="alert alert-danger">
+        <strong>❌ No registrado.</strong>
+        Este archivo no coincide con ningún documento registrado: o nunca se registró, o fue modificado.
+    </div>
+}
+
+<p><strong>Huella calculada:</strong> <code>@Model.HashSha256</code></p>
+<a asp-action="Index" class="btn btn-outline-secondary">Verificar otro archivo</a>

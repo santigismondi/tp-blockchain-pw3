@@ -23,7 +23,6 @@
     <Folder Include="Services\Interfaces\" />
     <Folder Include="Storage\" />
     <Folder Include="Options\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
 
 </Project>

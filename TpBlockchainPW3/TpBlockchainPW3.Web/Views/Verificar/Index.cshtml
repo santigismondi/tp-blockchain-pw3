@@ -1,0 +1,27 @@
+@model TpBlockchainPW3.Web.ViewModels.VerificarViewModel
+@{
+    ViewData["Title"] = "Verificar documento";
+}
+
+<h1>Verificar un documento</h1>
+<p class="text-muted">
+    Subí el archivo que recibiste. No lo guardamos: solo calculamos su huella (SHA-256)
+    y la comparamos con la registrada en la blockchain.
+</p>
+
+@* enctype es OBLIGATORIO para subir archivos; sin él, Archivo llega null *@
+<form asp-action="Index" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Archivo" class="form-label"></label>
+        <input asp-for="Archivo" type="file" class="form-control" />
+        <span asp-validation-for="Archivo" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Verificar</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

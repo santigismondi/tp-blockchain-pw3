@@ -117,4 +117,21 @@ public class DocumentoService : IDocumentoService
 
         return $"{inicio}{cantidad + 1:D4}";   // D4 = 4 dígitos con ceros: 0001
     }
+    
+    public async Task<ResultadoVerificacion> VerificarAsync(byte[] contenido)
+    {
+        var hash = _hashService.CalcularHash(contenido);
+
+        // 1) Le preguntamos al contrato: es la fuente de verdad
+        var enCadena = await _blockchainService.VerificarAsync(hash);
+
+        // 2) Buscamos datos "de presentación" en nuestra base.
+        //    Sin filtrar por EmisorId: la verificación es pública.
+        //    AsNoTracking: solo leemos, así EF no "vigila" la entidad para guardar cambios.
+        var documento = await _context.Documentos
+            .AsNoTracking()
+            .FirstOrDefaultAsync(d => d.HashSha256 == hash);
+
+        return new ResultadoVerificacion(hash, enCadena.Existe, enCadena.Fecha, enCadena.Emisor, documento);
+    }
 }
