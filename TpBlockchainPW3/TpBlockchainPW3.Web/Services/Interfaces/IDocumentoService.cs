@@ -8,4 +8,5 @@ public interface IDocumentoService
     Task<List<Documento>> ListarPorEmisorAsync(string emisorId);
     Task<Documento?> ObtenerAsync(int id, string emisorId);
     Task<ResultadoVerificacion> VerificarAsync(byte[] contenido);
+    Task<Documento?> ObtenerPorCodigoAsync(string codigo);
 }

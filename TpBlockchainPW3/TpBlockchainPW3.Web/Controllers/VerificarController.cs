@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TpBlockchainPW3.Web.Models;
 using TpBlockchainPW3.Web.Services.Interfaces;
 using TpBlockchainPW3.Web.ViewModels;
 
@@ -51,6 +52,37 @@ public class VerificarController : Controller
             _logger.LogError(ex, "Error al consultar la blockchain durante una verificación");
             ModelState.AddModelError(string.Empty, "No se pudo consultar la blockchain. Probá de nuevo en unos minutos.");
             return View(modelo);
+        }
+    }
+
+    [HttpGet]
+    public IActionResult PorCodigo() => View("VerificarPorCodigo", new VerificarPorCodigoModel());
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> PorCodigo(VerificarPorCodigoModel modelo)
+    {
+        if (!ModelState.IsValid)
+            return View("VerificarPorCodigo", modelo);
+
+        var documento = await _documentos.ObtenerPorCodigoAsync(modelo.Codigo);
+
+        if (documento == null || documento.Contenido == null)
+        {
+            ModelState.AddModelError(string.Empty, "El código ingresado no existe en el sistema.");
+            return View("VerificarPorCodigo", modelo);
+        }
+
+        try
+        {
+            var resultado = await _documentos.VerificarAsync(documento.Contenido);
+            return View("Resultado", resultado);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error al consultar la blockchain durante la verificación por código");
+            ModelState.AddModelError(string.Empty, "No se pudo consultar la blockchain. Probá de nuevo en unos minutos.");
+            return View("VerificarPorCodigo", modelo);
         }
     }
 }

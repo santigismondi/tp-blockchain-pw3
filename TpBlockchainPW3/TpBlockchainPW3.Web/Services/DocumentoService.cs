@@ -134,4 +134,10 @@ public class DocumentoService : IDocumentoService
 
         return new ResultadoVerificacion(hash, enCadena.Existe, enCadena.Fecha, enCadena.Emisor, documento);
     }
-}
+    public async Task<Documento?> ObtenerPorCodigoAsync(string codigo)
+    {
+        return await _context.Documentos
+        .AsNoTracking()
+        .FirstOrDefaultAsync(d => d.Codigo == codigo);
+    }
+ }
