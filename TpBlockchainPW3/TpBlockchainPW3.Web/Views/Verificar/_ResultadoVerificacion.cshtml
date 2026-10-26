@@ -1,0 +1,50 @@
+﻿@model TpBlockchainPW3.Web.Models.ResultadoVerificacion
+
+@{
+// 1. Auténtico: la blockchain confirmó que existe.
+// 2. No registrado: la blockchain dijo que no existe (enCadena = false sin excepciones).
+// 3. No se pudo verificar: se maneja si el controlador capturó un error o si modelo es nulo.
+}
+
+<div class="card shadow-sm mb-4 @(Model.Autentico ? "border-success" : "border-danger")">
+    <div class="card-body text-center py-4">
+        @if (Model.Autentico)
+        {
+            <div class="text-success mb-3">
+                <i class="bi bi-check-circle-fill" style="font-size: 3rem;"></i>
+            </div>
+            <h3 class="text-success fw-bold">Documento Auténtico</h3>
+            <p class="text-muted">
+                Registrado en la blockchain el <strong>@Model.FechaBlockchain?.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</strong>.
+            </p>
+
+            @if (Model.Documento is not null)
+            {
+                <div class="text-start bg-light p-3 rounded mt-3 border">
+                    <p class="mb-1"><strong>Código:</strong> @Model.Documento.Codigo</p>
+                    <p class="mb-0"><strong>Título:</strong> @Model.Documento.Titulo</p>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="text-danger mb-3">
+                <i class="bi bi-x-circle-fill" style="font-size: 3rem;"></i>
+            </div>
+            <h3 class="text-danger fw-bold">No Registrado</h3>
+            <p class="text-muted">
+                Este archivo no coincide con ningún documento registrado: o nunca se registró, o fue modificado.
+            </p>
+        }
+    </div>
+</div>
+
+<div class="alert alert-secondary text-center small text-muted" role="alert">
+    ℹ️ "Auténtico significa que el archivo no fue modificado; no garantiza que su contenido sea verdadero".
+</div>
+
+<div class="mt-3 text-center">
+    <p class="text-muted small"><strong>Huella calculada (SHA-256):</strong> <code>@Model.HashSha256</code></p>
+</div>
+
+          
