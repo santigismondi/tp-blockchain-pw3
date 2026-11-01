@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TpBlockchainPW3.Web.Models;
 using TpBlockchainPW3.Web.Services.Interfaces;
+using TpBlockchainPW3.Web.ViewModels;
+
 
 namespace TpBlockchainPW3.Web.Controllers
 {
@@ -11,6 +13,7 @@ namespace TpBlockchainPW3.Web.Controllers
     {
         private readonly IDocumentoService _documentoService;
         private readonly IPdfService _pdfService;
+
         public DocumentosController(IDocumentoService documentoService, IPdfService pdfService)
         {
             _documentoService = documentoService;
@@ -81,6 +84,64 @@ namespace TpBlockchainPW3.Web.Controllers
             return RedirectToAction("Detalle", new { id = resultado.Documento!.Id });
         }
 
+
+        [HttpGet]
+        public IActionResult NuevoCertificado()
+        {
+            return View(new GenerarCertificadoViewModel { Fecha = DateTime.Today });
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> NuevoCertificado(GenerarCertificadoViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var emisorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(emisorId)) return Unauthorized();
+
+            // 1. El código primero: va impreso en el pie del PDF
+            var codigo = await _documentoService.GenerarCodigoAsync(TipoDocumento.Certificado);
+
+            // 2. El PDF se genera UNA sola vez
+            var pdfBytes = _pdfService.GenerateCertificate(new CertificateModel
+            {
+                FullName = model.Nombre,
+                Dni = model.Dni,
+                Subject = model.Materia,
+                Grade = model.Nota!.Value.ToString(),
+                Date = model.Fecha!.Value,
+                Code = codigo
+            });
+
+            // 3. Esos mismos bytes se hashean y se guardan
+            var resultado = await _documentoService.RegistrarAsync(new NuevoDocumento
+            {
+                Titulo = $"Certificado de {model.Materia} - {model.Nombre}",
+                Tipo = TipoDocumento.Certificado,
+                NombreArchivo = $"Certificado_{codigo}.pdf",
+                Contenido = pdfBytes,
+                EmisorId = emisorId,
+                NombreDestinatario = model.Nombre,
+                DniDestinatario = model.Dni,
+                Materia = model.Materia,
+                Nota = model.Nota,
+                Codigo = codigo
+            });
+
+            if (!resultado.Exito && resultado.Documento == null)
+            {
+                ModelState.AddModelError(string.Empty, resultado.Mensaje);
+                return View(model);
+            }
+
+            TempData["MensajeExito"] = resultado.Mensaje;
+
+            return RedirectToAction(nameof(Detalle), new { id = resultado.Documento!.Id });
+        }
+        
         [HttpGet]
         public async Task<IActionResult> GenerarCertificado(int id)
         {
@@ -140,7 +201,15 @@ namespace TpBlockchainPW3.Web.Controllers
                 return NotFound("El archivo no contiene datos almacenados.");
             }
 
-            return File(documento.Contenido, "application/octet-stream", documento.NombreArchivo ?? $"documento_{documento.Codigo}.dat");
+           var nombre = documento.NombreArchivo ?? $"documento_{documento.Codigo}.dat";
+            var tipoContenido = nombre.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase)
+                ? "application/pdf"
+                : "application/octet-stream";
+
+            return File(documento.Contenido, tipoContenido, nombre);
         }
        }
+
+      
+   
     }

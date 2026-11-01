@@ -1,0 +1,46 @@
+@model TpBlockchainPW3.Web.ViewModels.GenerarCertificadoViewModel
+@{
+    ViewData["Title"] = "Generar certificado";
+}
+
+<div class="container mt-4">
+    <h2>Generar certificado</h2>
+    <hr />
+
+    <form asp-action="NuevoCertificado" method="post" class="col-md-6 p-0">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+        <div class="mb-3">
+            <label asp-for="Nombre" class="form-label"></label>
+            <input asp-for="Nombre" class="form-control" />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Dni" class="form-label"></label>
+            <input asp-for="Dni" class="form-control" inputmode="numeric" maxlength="8" />
+            <span asp-validation-for="Dni" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Materia" class="form-label"></label>
+            <input asp-for="Materia" class="form-control" />
+            <span asp-validation-for="Materia" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Nota" class="form-label"></label>
+            <input asp-for="Nota" class="form-control" type="number" min="1" max="10" />
+            <span asp-validation-for="Nota" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Fecha" class="form-label"></label>
+            <input asp-for="Fecha" class="form-control" type="date" max="@DateTime.Today.ToString("yyyy-MM-dd")" />
+            <span asp-validation-for="Fecha" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Generar y registrar</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -8,6 +8,7 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Mis Documentos Registrados</h2>
         <div>
+            <a asp-action="NuevoCertificado" class="btn btn-outline-primary">Generar certificado</a>
             <a asp-action="Subir" class="btn btn-primary">Subir documento</a>
         </div>
     </div>
@@ -51,7 +52,7 @@
                         </td>
                         <td>
                             <a asp-action="Detalle" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white">Ver Detalle</a>
-                            <a asp-action="GenerarCertificado" asp-route-id="@item.Id" class="btn btn-sm btn-success">Certificado</a>
+                            <a asp-action="Descargar" asp-route-id="@item.Id" class="btn btn-sm btn-success">Descargar</a>
                         </td>
                     </tr>
                 }

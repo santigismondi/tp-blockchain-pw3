@@ -14,4 +14,5 @@ public class NuevoDocumento
     public string? DniDestinatario { get; set; }
     public string? Materia { get; set; }
     public decimal? Nota { get; set; }
+    public string? Codigo { get; set; }
 }

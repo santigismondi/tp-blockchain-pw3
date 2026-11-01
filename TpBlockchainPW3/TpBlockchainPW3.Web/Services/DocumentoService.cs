@@ -48,7 +48,7 @@ public class DocumentoService : IDocumentoService
         // 3 y 4. Generar código y guardar como Pendiente
         var documento = new Documento
         {
-            Codigo = await GenerarCodigoAsync(datos.Tipo),
+            Codigo = datos.Codigo ?? await GenerarCodigoAsync(datos.Tipo),
             Titulo = datos.Titulo,
             Tipo = datos.Tipo,
             Contenido = datos.Contenido,
@@ -107,7 +107,7 @@ public class DocumentoService : IDocumentoService
     }
 
     // Genera códigos tipo DOC-2026-0001 o CERT-2026-0001
-    private async Task<string> GenerarCodigoAsync(TipoDocumento tipo)
+    public async Task<string> GenerarCodigoAsync(TipoDocumento tipo)
     {
         var prefijo = tipo == TipoDocumento.Certificado ? "CERT" : "DOC";
         var inicio = $"{prefijo}-{DateTime.UtcNow.Year}-";

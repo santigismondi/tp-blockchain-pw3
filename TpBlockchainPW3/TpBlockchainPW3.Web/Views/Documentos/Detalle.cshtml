@@ -18,6 +18,17 @@
 
                 <dt class="col-sm-3">Tipo:</dt>
                 <dd class="col-sm-9">@Model.Tipo</dd>
+                @if (!string.IsNullOrEmpty(Model.NombreDestinatario))
+                {
+                    <dt class="col-sm-3">Destinatario:</dt>
+                    <dd class="col-sm-9">@Model.NombreDestinatario (DNI @Model.DniDestinatario)</dd>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.Materia))
+                {
+                    <dt class="col-sm-3">Materia:</dt>
+                    <dd class="col-sm-9">@Model.Materia @(Model.Nota != null ? $"- Nota {Model.Nota}" : "")</dd>
+                }
 
                 <dt class="col-sm-3">Estado:</dt>
                 <dd class="col-sm-9">
