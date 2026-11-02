@@ -1,0 +1,20 @@
+@page
+@model ConfirmEmailModel
+@{
+    ViewData["Title"] = "Confirmación de cuenta";
+}
+
+<div class="dc-page dc-auth text-center">
+    @if (Model.Confirmado)
+    {
+        <h1 class="dc-title">Cuenta confirmada</h1>
+        <p class="dc-lead mx-auto mb-4">Ya podés iniciar sesión y registrar documentos.</p>
+        <a class="btn btn-primary btn-lg" asp-page="./Login">Iniciar sesión</a>
+    }
+    else
+    {
+        <h1 class="dc-title">No pudimos confirmar tu cuenta</h1>
+        <p class="dc-lead mx-auto mb-4">El enlace no es válido o ya venció. Pedí uno nuevo.</p>
+        <a class="btn btn-dark" asp-page="./ResendEmailConfirmation">Reenviar confirmación</a>
+    }
+</div>

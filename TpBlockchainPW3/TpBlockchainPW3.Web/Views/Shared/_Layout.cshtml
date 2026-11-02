@@ -3,55 +3,82 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - DocChain</title>
+    <meta name="description" content="DocChain: registrá documentos en la blockchain y verificá que no fueron modificados." />
+    <meta name="theme-color" content="#0b0f14" />
+    <title>@ViewData["Title"] · DocChain</title>
+    <link rel="icon" href="~/favicon.svg" type="image/svg+xml" />
     <script type="importmap"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/TpBlockchainPW3.Web.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
-                    <i class="bi bi-shield-check"></i> DocChain
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-lg dc-navbar" aria-label="Navegación principal">
+            <div class="container">
+                @* El logo lleva al inicio: no hace falta un link "Inicio" aparte *@
+                <a class="navbar-brand dc-brand" asp-area="" asp-controller="Home" asp-action="Index" aria-label="DocChain, ir al inicio">
+                    <partial name="_Logo" />
+                    <span>DocChain</span>
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
-                        </li>
-                        @if (User.Identity?.IsAuthenticated == true)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Documentos" asp-action="Index">Mis documentos</a>
-                            </li>
-                        }
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Verificar" asp-action="Index">Verificar</a>
-                        </li>
-                    </ul>
+
+                @* Escritorio: todo en una fila, empujado hacia la derecha *@
+                <div class="d-none d-lg-flex align-items-center ms-auto">
+                    <partial name="_NavLinks" />
+                    <span class="dc-nav-sep mx-4"></span>
                     <partial name="_LoginPartial" />
                 </div>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuPrincipal"
+                        aria-controls="menuPrincipal" aria-label="Abrir menú">
+                    <i class="bi bi-list fs-5"></i>
+                </button>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+    @* Tablet y celular: panel lateral. Va fuera del header para que el fondo oscuro no lo tape *@
+    <div class="offcanvas offcanvas-end dc-offcanvas d-lg-none" tabindex="-1" id="menuPrincipal" aria-labelledby="menuPrincipalTitulo">
+        <div class="offcanvas-header">
+            <span class="dc-brand" id="menuPrincipalTitulo">
+                <partial name="_Logo" />
+                <span>DocChain</span>
+            </span>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar menú"></button>
+        </div>
+        <div class="offcanvas-body">
+            <partial name="_NavLinks" />
+            <partial name="_LoginPartial" />
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - DocChain - Verificación de documentos con blockchain
+    <main role="main" class="dc-main">
+        <div class="container pt-4 pb-5">
+            <partial name="_Alertas" />
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="dc-footer">
+        <div class="container d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <a class="dc-brand fs-6" asp-area="" asp-controller="Home" asp-action="Index">
+                    <partial name="_Logo" />
+                    <span>DocChain</span>
+                </a>
+                <span>© @DateTime.Now.Year</span>
+            </div>
+            <nav class="d-flex flex-wrap gap-4" aria-label="Enlaces del pie">
+                <a asp-area="" asp-controller="Verificar" asp-action="Index">Verificar</a>
+                <a asp-area="" asp-controller="Verificar" asp-action="PorCodigo">Verificar por código</a>
+                <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a>
+            </nav>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

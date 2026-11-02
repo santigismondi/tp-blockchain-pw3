@@ -1,0 +1,11 @@
+<nav class="dc-side-nav" aria-label="Secciones de Mi cuenta">
+    <a class="@ManageNavPages.Activa(ViewContext, ManageNavPages.Index)" asp-page="./Index">
+        <i class="bi bi-person"></i> Resumen
+    </a>
+    <a class="@ManageNavPages.Activa(ViewContext, ManageNavPages.ChangePassword)" asp-page="./ChangePassword">
+        <i class="bi bi-key"></i> Contraseña
+    </a>
+    <a class="@ManageNavPages.Activa(ViewContext, ManageNavPages.PersonalData)" asp-page="./PersonalData">
+        <i class="bi bi-shield-lock"></i> Datos y privacidad
+    </a>
+</nav>

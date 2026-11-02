@@ -15,6 +15,7 @@ namespace TpBlockchainPW3.Web.Models
         [MaxFileSize(10 * 1024 * 1024, ErrorMessage = "El archivo no puede superar los 10 MB.")]
         public IFormFile Archivo { get; set; } = null!;
 
+        [Required(ErrorMessage = "Elegí el tipo de documento.")]
         [Display(Name = "Tipo de Documento")]
         public TipoDocumento Tipo { get; set; } = TipoDocumento.Externo;
 

@@ -1,0 +1,23 @@
+@page
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Confirmá tu cuenta";
+}
+
+<div class="dc-page dc-auth text-center">
+    @if (Model.DisplayConfirmAccountLink)
+    {
+        @* Sin servicio de email configurado, Identity muestra el enlace directamente *@
+        <h1 class="dc-title">Último paso</h1>
+        <p class="dc-lead mx-auto mb-4">
+            Confirmá tu cuenta <strong class="text-body">@Model.Email</strong> para empezar a registrar documentos.
+        </p>
+        <a class="btn btn-primary btn-lg" id="confirm-link" href="@Model.EmailConfirmationUrl">Confirmar mi cuenta</a>
+    }
+    else
+    {
+        <h1 class="dc-title">Confirmá tu email</h1>
+        <p class="dc-lead mx-auto mb-4">Te enviamos un enlace a <strong class="text-body">@Model.Email</strong>. Abrilo para activar tu cuenta.</p>
+        <a class="btn btn-outline-secondary" asp-page="./ResendEmailConfirmation">No me llegó el email</a>
+    }
+</div>

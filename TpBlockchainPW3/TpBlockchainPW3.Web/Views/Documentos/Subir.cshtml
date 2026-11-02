@@ -1,49 +1,68 @@
-﻿@model TpBlockchainPW3.Web.Models.SubirDocumentoModel
+@model TpBlockchainPW3.Web.Models.SubirDocumentoModel
 
 @{
-    ViewData["Title"] = "Subir Documento";
+    ViewData["Title"] = "Subir documento";
 }
 
-<div class="container mt-4">
-    <h2>Registrar Nuevo Documento</h2>
-    <hr />
+<div class="dc-page dc-narrow">
+    <a asp-action="Index" class="small text-secondary text-decoration-none d-inline-flex align-items-center gap-1 mb-3">
+        <i class="bi bi-arrow-left"></i> Mis documentos
+    </a>
+    <h1 class="dc-title">Registrar un documento</h1>
+    <p class="dc-lead mb-4">Calculamos la huella del archivo y la guardamos en la blockchain como prueba de su existencia.</p>
 
-    <form asp-action="Subir" method="post" enctype="multipart/form-data" id="formSubirDoc">
-        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <div class="dc-card">
+        <form asp-action="Subir" method="post" enctype="multipart/form-data" id="formSubirDoc">
+            <div asp-validation-summary="ModelOnly"></div>
 
-        <div class="mb-3">
-            <label asp-for="Titulo" class="form-label"></label>
-            <input asp-for="Titulo" class="form-control" placeholder="Ej: Titulo Secundario" />
-            <span asp-validation-for="Titulo" class="text-danger"></span>
-        </div>
+            <div class="mb-4">
+                <label asp-for="Titulo" class="form-label"></label>
+                <input asp-for="Titulo" class="form-control" placeholder="Ej.: Título secundario" />
+                <span asp-validation-for="Titulo"></span>
+            </div>
 
-        <div class="mb-3">
-            <label asp-for="Tipo" class="form-label"></label>
-            <select asp-for="Tipo" class="form-select" asp-items="Html.GetEnumSelectList<TpBlockchainPW3.Web.Models.TipoDocumento>()"></select>
-            <span asp-validation-for="Tipo" class="text-danger"></span>
-        </div>
+            <div class="mb-4">
+                <label asp-for="Tipo" class="form-label"></label>
+                <select asp-for="Tipo" class="form-select" asp-items="Html.GetEnumSelectList<TpBlockchainPW3.Web.Models.TipoDocumento>()"></select>
+                <span asp-validation-for="Tipo"></span>
+            </div>
 
-        <div class="mb-3">
-            <label asp-for="Archivo" class="form-label"></label>
-            <input asp-for="Archivo" type="file" class="form-control" />
-            <span asp-validation-for="Archivo" class="text-danger"></span>
-            <small class="text-muted">Tamaño máximo permitido: 10 MB.</small>
-        </div>
+            <div>
+                <label asp-for="Archivo" class="form-label"></label>
+                <div class="dc-drop">
+                    <input asp-for="Archivo" type="file" />
+                    <div class="dc-drop-empty">
+                        <i class="bi bi-cloud-arrow-up dc-drop-icon"></i>
+                        <span class="dc-drop-title">Arrastrá el archivo o <u>elegilo desde tu equipo</u></span>
+                        <span class="dc-hint">Tamaño máximo permitido: 10 MB</span>
+                    </div>
+                    <div class="dc-drop-pill">
+                        <i class="bi bi-file-earmark-check"></i>
+                        <div class="flex-grow-1 overflow-hidden">
+                            <span class="dc-drop-name"></span>
+                            <span class="dc-drop-size"></span>
+                        </div>
+                        <button type="button" class="dc-drop-clear" aria-label="Quitar archivo" title="Quitar archivo"><i class="bi bi-x-lg"></i></button>
+                    </div>
+                </div>
+                <span asp-validation-for="Archivo" class="d-block mt-2"></span>
+            </div>
 
-        <div class="mt-4">
-            <button type="submit" id="btnSubmit" class="btn btn-primary">Registrar</button>
-            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-        </div>
-
-        <div id="alertaProcesando" class="alert alert-warning d-none mt-3 shadow-sm" role="alert">
-            <div class="d-flex align-items-center">
-                <div class="spinner-border spinner-border-sm me-3" role="status"></div>
+            <div id="alertaProcesando" class="alert alert-warning d-none mt-4 mb-0" role="status">
+                <div class="spinner-border spinner-border-sm mt-1 flex-shrink-0" aria-hidden="true"></div>
                 <div>
-                    <strong>Registrando en la Blockchain...</strong> Esto puede tardar unos segundos. Por favor, no cierre ni recargue la página.
+                    <strong>Registrando en la blockchain…</strong> Esto puede tardar unos segundos. No cierres ni recargues la página.
                 </div>
             </div>
-        </div>
-    </form>
+
+            <div class="d-flex flex-column-reverse flex-sm-row justify-content-end gap-2 mt-4 pt-4 border-top">
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                <button type="submit" id="btnSubmit" class="btn btn-primary">
+                    Registrar en la blockchain <i class="bi bi-arrow-right dc-arrow"></i>
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 
 @section Scripts {

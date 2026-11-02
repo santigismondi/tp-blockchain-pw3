@@ -3,12 +3,15 @@
     ViewData["Title"] = "Resultado de la verificación";
 }
 
-<div class="container my-4" style="max-width: 600px;">
-    <h2 class="mb-4 text-center">Resultado de la Verificación</h2>
+<div class="dc-page dc-narrow">
+    <h1 class="visually-hidden">Resultado de la verificación</h1>
 
     <partial name="_ResultadoVerificacion" model="Model" />
 
-    <div class="text-center mt-4">
-        <a asp-action="Index" class="btn btn-outline-primary">Verificar otro archivo</a>
+    <div class="d-flex flex-wrap gap-2 mt-4">
+        <a asp-action="Index" class="btn btn-dark">
+            <i class="bi bi-arrow-counterclockwise"></i> Verificar otro archivo
+        </a>
+        <a asp-action="PorCodigo" class="btn btn-outline-secondary">Verificar por código</a>
     </div>
 </div>

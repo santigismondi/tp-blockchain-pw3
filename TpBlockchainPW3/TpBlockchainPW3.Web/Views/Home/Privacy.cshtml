@@ -1,6 +1,25 @@
-﻿@{
-    ViewData["Title"] = "Privacy Policy";
+@{
+    ViewData["Title"] = "Privacidad";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="dc-page dc-narrow">
+    <h1 class="dc-title">Qué datos guardamos y dónde</h1>
+    <p class="dc-lead mb-5">DocChain separa lo que queda público en la blockchain de lo que se guarda en nuestra base de datos.</p>
+
+    <div class="dc-card">
+        <dl class="dc-dl">
+            <div>
+                <dt>En la blockchain</dt>
+                <dd>Solo la huella SHA-256 de cada documento registrado. A partir de la huella no se puede reconstruir el archivo.</dd>
+            </div>
+            <div>
+                <dt>En nuestra base de datos</dt>
+                <dd>Los documentos que registra un emisor, con su título, tipo y fecha, para poder descargarlos y emitir su certificado.</dd>
+            </div>
+            <div>
+                <dt>Al verificar</dt>
+                <dd>El archivo que subís para verificar no se guarda: solo se calcula su huella y se compara con la registrada.</dd>
+            </div>
+        </dl>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+@model string?
+
+@* Mensaje de una sola vez después de guardar algo. Si empieza con "Error" se muestra en rojo. *@
+@if (!string.IsNullOrEmpty(Model))
+{
+    var esError = Model.StartsWith("Error");
+    <div class="alert @(esError ? "alert-danger" : "alert-success") alert-dismissible fade show mb-4" role="alert">
+        <i class="bi @(esError ? "bi-exclamation-circle" : "bi-check-circle")"></i>
+        <div>@Model</div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+}

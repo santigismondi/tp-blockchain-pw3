@@ -1,26 +1,48 @@
-﻿@model TpBlockchainPW3.Web.Models.VerificarPorCodigoModel
+@model TpBlockchainPW3.Web.Models.VerificarPorCodigoModel
 @{
-    ViewData["Title"] = "Verificar por Código";
+    ViewData["Title"] = "Verificar por código";
 }
 
-<div class="container my-4" style="max-width: 600px;">
-    <h2 class="mb-3">Verificar documento por código</h2>
-    <p class="text-muted">
-        Ingresá el código único impreso en el certificado para consultar su estado en la blockchain de forma rápida.
-    </p>
+<div class="dc-page">
+    <div class="row g-5">
+        <div class="col-lg-7">
+            <h1 class="dc-title">Verificá un documento</h1>
+            <p class="dc-lead mb-4">Ingresá el código impreso en el certificado para consultar su estado en la blockchain.</p>
 
-    <form asp-action="PorCodigo" method="post">
-        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <partial name="_Modos" model="@("PorCodigo")" />
 
-        <div class="mb-3">
-            <label asp-for="Codigo" class="form-label"></label>
-            <input asp-for="Codigo" class="form-control" placeholder="Ej: DOC-2026-0001" />
-            <span asp-validation-for="Codigo" class="text-danger"></span>
+            <div class="dc-card">
+                <form asp-action="PorCodigo" method="post" data-cargando="Verificando…">
+                    <div asp-validation-summary="ModelOnly"></div>
+
+                    <label asp-for="Codigo" class="form-label"></label>
+                    <input asp-for="Codigo" class="form-control form-control-lg dc-mono" placeholder="CERT-2026-0001" autocomplete="off" />
+                    <span asp-validation-for="Codigo" class="d-block mt-2"></span>
+                    <div class="dc-hint mt-2">Figura al pie del certificado como «Código de verificación único».</div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mt-4">
+                        Verificar código <i class="bi bi-arrow-right dc-arrow"></i>
+                    </button>
+                </form>
+            </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">Verificar Código</button>
-        <a asp-action="Index" class="btn btn-outline-secondary ms-2">O verificar subiendo archivo</a>
-    </form>
+        <aside class="col-lg-5">
+            <div class="dc-card bg-transparent h-100">
+                <h2 class="dc-card-title">Cómo se verifica</h2>
+                <ul class="dc-list">
+                    <li>Buscamos el documento asociado a ese código.</li>
+                    <li>Recalculamos su huella y la consultamos en el contrato inteligente.</li>
+                    <li>Si coincide, el documento no fue alterado desde que se registró.</li>
+                </ul>
+                <hr class="my-4" />
+                <p class="small text-secondary mb-0">
+                    ¿Tenés el archivo? Es la forma más segura de comprobarlo:
+                    <a asp-action="Index">subir el archivo <i class="bi bi-arrow-right dc-arrow"></i></a>
+                </p>
+            </div>
+        </aside>
+    </div>
 </div>
 
 @section Scripts {

@@ -1,17 +1,143 @@
-﻿@{
+@{
     ViewData["Title"] = "Inicio";
+    var logueado = User.Identity?.IsAuthenticated == true;
 }
 
-<div class="text-center py-5">
-    <h1 class="display-4 fw-bold">DocChain</h1>
-    <p class="lead mb-1">Registrá tus documentos en la blockchain y obtené una prueba de que existen y no fueron modificados.</p>
-    <p class="lead">Cualquier persona puede verificar su autenticidad subiendo el archivo.</p>
+<section class="dc-hero">
+    <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+            <h1 class="dc-hero-title">Comprobá que un documento <span>no fue modificado.</span></h1>
+            <p class="dc-hero-lead">
+                DocChain registra la huella digital de tus documentos en la blockchain.
+                Cualquier persona puede verificar después que el archivo es exactamente el original.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-primary btn-lg" asp-controller="Verificar" asp-action="Index">
+                    Verificar un documento <i class="bi bi-arrow-right dc-arrow"></i>
+                </a>
+                @if (logueado)
+                {
+                    <a class="btn btn-outline-light btn-lg" asp-controller="Documentos" asp-action="Subir">Registrar documento</a>
+                }
+                else
+                {
+                    <a class="btn btn-outline-light btn-lg" asp-area="Identity" asp-page="/Account/Register">Registrar documentos</a>
+                }
+            </div>
+            <div class="dc-hero-note">
+                <span><i class="bi bi-fingerprint"></i>Huella SHA-256</span>
+                <span><i class="bi bi-link-45deg"></i>Registro en Ethereum</span>
+                <span><i class="bi bi-person-check"></i>Verificación sin cuenta</span>
+            </div>
+        </div>
 
-    <div class="mt-4 d-flex justify-content-center gap-2">
-        <a class="btn btn-primary btn-lg" asp-controller="Verificar" asp-action="Index">Verificar un documento</a>
-        @if (User.Identity?.IsAuthenticated != true)
-        {
-            <a class="btn btn-outline-secondary btn-lg" asp-area="Identity" asp-page="/Account/Login">Iniciar sesión</a>
-        }
+        @* Ilustración: el documento queda guardado dentro de un bloque de la cadena *@
+        <div class="col-lg-6" aria-hidden="true">
+            <div class="dc-chain">
+                <div class="dc-block is-faded">
+                    <div class="dc-block-head"><span>Bloque #18 402 117</span><span>12:31:48</span></div>
+                    <div class="dc-block-row"><span>hash</span><span>0x8c1f…a20e</span></div>
+                </div>
+                <div class="dc-link"></div>
+                <div class="dc-block is-current">
+                    <div class="dc-block-head">
+                        <span>Bloque #18 402 118</span>
+                        <span class="dc-block-ok">Auténtico</span>
+                    </div>
+                    <div class="dc-block-row"><span>documento</span><span>CERT-2026-0042</span></div>
+                    <div class="dc-block-row"><span>tx</span><span>0x5e1a…c07b</span></div>
+                    <div class="dc-block-hash">sha256 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</div>
+                </div>
+                <div class="dc-link"></div>
+                <div class="dc-block is-faded">
+                    <div class="dc-block-head"><span>Bloque #18 402 119</span><span>12:32:12</span></div>
+                    <div class="dc-block-row"><span>hash</span><span>0x3b9d…77f1</span></div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+</section>
+
+<section class="dc-section">
+    <div class="text-center mb-5">
+        <h2 class="dc-section-title">Cómo funciona</h2>
+        <p class="text-secondary mt-2 mb-0">El archivo nunca se publica: en la blockchain solo queda su huella.</p>
+    </div>
+    <ol class="dc-steps row g-4 list-unstyled mb-0">
+        <li class="col-md-4">
+            <span class="dc-step-icon"><i class="bi bi-cloud-arrow-up"></i></span>
+            <span class="dc-step-num">01</span>
+            <h3>Subís el documento</h3>
+            <p>Como emisor, cargás el título, contrato o certificado desde tu panel.</p>
+        </li>
+        <li class="col-md-4">
+            <span class="dc-step-icon"><i class="bi bi-fingerprint"></i></span>
+            <span class="dc-step-num">02</span>
+            <h3>Se registra su huella</h3>
+            <p>Calculamos su hash SHA-256 y un contrato inteligente lo guarda en la blockchain para siempre.</p>
+        </li>
+        <li class="col-md-4">
+            <span class="dc-step-icon is-ok"><i class="bi bi-patch-check"></i></span>
+            <span class="dc-step-num">03</span>
+            <h3>Cualquiera lo verifica</h3>
+            <p>Quien recibe el archivo lo sube y sabe al instante si es el original. Sin crear una cuenta.</p>
+        </li>
+    </ol>
+</section>
+
+<section class="dc-section">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-2 mb-4">
+        <h2 class="dc-section-title">Para qué sirve</h2>
+        <p class="text-secondary mb-0" style="max-width: 30rem;">Blockchain más allá de las criptomonedas: cualquier documento que otro necesite poder comprobar.</p>
+    </div>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <article class="dc-use">
+                <i class="bi bi-mortarboard"></i>
+                <h3>Títulos y certificados académicos</h3>
+                <p>Una universidad registra el título al emitirlo. Una empresa lo verifica antes de contratar, sin llamar a la facultad.</p>
+            </article>
+        </div>
+        <div class="col-md-4">
+            <article class="dc-use">
+                <i class="bi bi-file-earmark-text"></i>
+                <h3>Contratos</h3>
+                <p>Las partes registran la versión firmada. Si alguien cambia una cláusula después, la huella deja de coincidir.</p>
+            </article>
+        </div>
+        <div class="col-md-4">
+            <article class="dc-use">
+                <i class="bi bi-clipboard2-pulse"></i>
+                <h3>Certificados médicos</h3>
+                <p>Una clínica registra el certificado. El empleador o la escuela comprueba que no fue adulterado.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="dc-section">
+    <div class="row g-4 align-items-start">
+        <div class="col-lg-5">
+            <h2 class="dc-section-title">Auténtico no es lo mismo que verdadero</h2>
+        </div>
+        <div class="col-lg-7">
+            <ul class="dc-list">
+                <li>Que un documento sea <strong>auténtico</strong> significa que el archivo es idéntico al que se registró: nadie lo modificó desde entonces.</li>
+                <li>No garantiza que su contenido sea cierto. Eso depende de quién lo emitió.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="dc-band d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-4">
+        <div>
+            <h2>¿Recibiste un documento?</h2>
+            <p class="mb-0">Comprobá en segundos si es el original. No necesitás cuenta.</p>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-primary btn-lg" asp-controller="Verificar" asp-action="Index">Subir archivo</a>
+            <a class="btn btn-outline-light btn-lg" asp-controller="Verificar" asp-action="PorCodigo">Usar un código</a>
+        </div>
+    </div>
+</section>

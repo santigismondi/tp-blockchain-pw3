@@ -1,0 +1,14 @@
+@page
+@model LogoutModel
+@{
+    ViewData["Title"] = "Sesión cerrada";
+}
+
+<div class="dc-page dc-auth text-center">
+    <h1 class="dc-title">Cerraste sesión</h1>
+    <p class="dc-lead mx-auto mb-4">Podés seguir verificando documentos sin cuenta.</p>
+    <div class="d-flex justify-content-center gap-2">
+        <a class="btn btn-primary" asp-area="" asp-controller="Verificar" asp-action="Index">Verificar un documento</a>
+        <a class="btn btn-outline-secondary" asp-page="./Login">Iniciar sesión</a>
+    </div>
+</div>

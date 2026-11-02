@@ -1,62 +1,65 @@
-﻿@model IEnumerable<TpBlockchainPW3.Web.Models.Documento>
+@model IEnumerable<TpBlockchainPW3.Web.Models.Documento>
 
 @{
-    ViewData["Title"] = "Mis Documentos";
+    ViewData["Title"] = "Mis documentos";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Mis Documentos Registrados</h2>
+<div class="dc-page">
+    <div class="dc-page-header">
         <div>
-            <a asp-action="Subir" class="btn btn-primary">Subir documento</a>
+            <h1 class="dc-title">Mis documentos</h1>
+            <p class="dc-lead">Todo lo que registraste en la blockchain, con su estado y su certificado.</p>
         </div>
+        <a asp-action="Subir" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Subir documento
+        </a>
     </div>
-    <hr />
 
-    @if (TempData["MensajeExito"] != null)
+    @if (!Model.Any())
     {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            @TempData["MensajeExito"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="dc-card dc-empty">
+            <i class="bi bi-folder2-open"></i>
+            <h2 class="h5 mt-3 mb-1">Todavía no registraste documentos</h2>
+            <p class="text-secondary mb-4">Subí el primero y vas a obtener su huella y su comprobante en la blockchain.</p>
+            <a asp-action="Subir" class="btn btn-primary">Subir mi primer documento</a>
         </div>
     }
-
-    <table class="table table-striped table-hover shadow-sm">
-        <thead class="table-dark">
-            <tr>
-                <th>Título</th>
-                <th>Código</th>
-                <th>Fecha de Creación</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (!Model.Any())
-            {
-                <tr>
-                    <td colspan="5" class="text-center text-muted py-4">No tenés documentos registrados todavía.</td>
-                </tr>
-            }
-            else
-            {
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.Titulo</td>
-                        <td><code>@item.Codigo</code></td>
-                        <td>@item.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</td>
-                        <td>
-                            <partial name="_EstadoBadge" model="item.Estado" />
-                        </td>
-                        <td>
-                            <a asp-action="Detalle" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white">Ver Detalle</a>
-                            <a asp-action="GenerarCertificado" asp-route-id="@item.Id" class="btn btn-sm btn-success">Certificado</a>
-                        </td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
+    else
+    {
+        <div class="dc-card dc-table-wrap">
+            <div class="table-responsive">
+                <table class="table table-hover dc-table">
+                    <thead>
+                        <tr>
+                            <th>Documento</th>
+                            <th>Código</th>
+                            <th>Creado</th>
+                            <th>Estado</th>
+                            <th class="text-end"><span class="visually-hidden">Acciones</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a asp-action="Detalle" asp-route-id="@item.Id" class="fw-medium text-body text-decoration-none">@item.Titulo</a>
+                                    <div class="small text-secondary">@item.Tipo</div>
+                                </td>
+                                <td><span class="dc-mono text-nowrap">@item.Codigo</span></td>
+                                <td class="text-secondary text-nowrap">@item.FechaCreacion.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
+                                <td><partial name="_EstadoBadge" model="item.Estado" /></td>
+                                <td class="text-end text-nowrap">
+                                    <a asp-action="Detalle" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Ver detalle</a>
+                                    <a asp-action="GenerarCertificado" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary" title="Descargar certificado en PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i> Certificado
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
 </div>
-

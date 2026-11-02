@@ -3,27 +3,62 @@
     ViewData["Title"] = "Verificar documento";
 }
 
-<h1>Verificar un documento</h1>
-<p class="text-muted">
-    Subí el archivo que recibiste. No lo guardamos: solo calculamos su huella (SHA-256)
-    y la comparamos con la registrada en la blockchain.
-</p>
+<div class="dc-page">
+    <div class="row g-5">
+        <div class="col-lg-7">
+            <h1 class="dc-title">Verificá un documento</h1>
+            <p class="dc-lead mb-4">Subí el archivo que recibiste y lo comparamos con la huella registrada en la blockchain.</p>
 
-@* enctype es OBLIGATORIO para subir archivos; sin él, Archivo llega null *@
-<form asp-action="Index" method="post" enctype="multipart/form-data">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <partial name="_Modos" model="@("Index")" />
 
-    <div class="mb-3">
-        <label asp-for="Archivo" class="form-label"></label>
-        <input asp-for="Archivo" type="file" class="form-control" />
-        <span asp-validation-for="Archivo" class="text-danger"></span>
+            <div class="dc-card">
+                @* enctype es OBLIGATORIO para subir archivos; sin él, Archivo llega null *@
+                <form asp-action="Index" method="post" enctype="multipart/form-data" data-cargando="Verificando…">
+                    <div asp-validation-summary="ModelOnly"></div>
+
+                    <label asp-for="Archivo" class="form-label"></label>
+                    <div class="dc-drop">
+                        <input asp-for="Archivo" type="file" />
+                        <div class="dc-drop-empty">
+                            <i class="bi bi-cloud-arrow-up dc-drop-icon"></i>
+                            <span class="dc-drop-title">Arrastrá el archivo o <u>elegilo desde tu equipo</u></span>
+                            <span class="dc-hint">Cualquier formato · hasta 10 MB</span>
+                        </div>
+                        <div class="dc-drop-pill">
+                            <i class="bi bi-file-earmark-check"></i>
+                            <div class="flex-grow-1 overflow-hidden">
+                                <span class="dc-drop-name"></span>
+                                <span class="dc-drop-size"></span>
+                            </div>
+                            <button type="button" class="dc-drop-clear" aria-label="Quitar archivo" title="Quitar archivo"><i class="bi bi-x-lg"></i></button>
+                        </div>
+                    </div>
+                    <span asp-validation-for="Archivo" class="d-block mt-2"></span>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mt-4">
+                        Verificar autenticidad <i class="bi bi-arrow-right dc-arrow"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <aside class="col-lg-5">
+            <div class="dc-card bg-transparent h-100">
+                <h2 class="dc-card-title">Qué pasa con tu archivo</h2>
+                <ul class="dc-list">
+                    <li>No lo guardamos: se procesa en el momento y se descarta.</li>
+                    <li>Calculamos su huella SHA-256, un código único de 64 caracteres.</li>
+                    <li>Buscamos esa huella en el contrato inteligente. Si está, el archivo es idéntico al registrado.</li>
+                    <li>Si cambió aunque sea un byte, la huella es otra y no va a coincidir.</li>
+                </ul>
+                <hr class="my-4" />
+                <p class="small text-secondary mb-0">
+                    ¿Tenés un certificado impreso? Usá el código que figura en él:
+                    <a asp-action="PorCodigo">verificar por código <i class="bi bi-arrow-right dc-arrow"></i></a>
+                </p>
+            </div>
+        </aside>
     </div>
-
-    <button type="submit" class="btn btn-primary">Verificar</button>
-</form>
-
-<div class="mt-3">
-    <a asp-action="PorCodigo" class="text-decoration-none">¿Tenés un certificado impreso? Verificalo por código aquí &rarr;</a>
 </div>
 
 @section Scripts {

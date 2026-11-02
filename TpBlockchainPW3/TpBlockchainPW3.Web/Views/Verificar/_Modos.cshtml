@@ -1,0 +1,11 @@
+@* Selector entre los dos modos de verificación. Model = acción activa ("Index" o "PorCodigo") *@
+@model string
+
+<nav class="dc-segmented mb-4" aria-label="Modo de verificación">
+    <a asp-action="Index" class="@(Model == "Index" ? "active" : "")" aria-current="@(Model == "Index" ? "page" : null)">
+        <i class="bi bi-file-earmark-arrow-up"></i> Subir archivo
+    </a>
+    <a asp-action="PorCodigo" class="@(Model == "PorCodigo" ? "active" : "")" aria-current="@(Model == "PorCodigo" ? "page" : null)">
+        <i class="bi bi-upc"></i> Por código
+    </a>
+</nav>

@@ -1,0 +1,20 @@
+@* Links de navegación: se usan en la barra de escritorio y en el panel lateral (tablet y celular) *@
+@{
+    // Marca como activo el link de la sección en la que está el usuario
+    var controladorActual = ViewContext.RouteData.Values["controller"]?.ToString();
+    var areaActual = ViewContext.RouteData.Values["area"]?.ToString();
+    string Activo(string controlador) =>
+        string.IsNullOrEmpty(areaActual) && controladorActual == controlador ? "active" : "";
+}
+
+<ul class="navbar-nav align-items-lg-center gap-lg-4">
+    <li class="nav-item">
+        <a class="dc-nav-link @Activo("Verificar")" asp-area="" asp-controller="Verificar" asp-action="Index">Verificar</a>
+    </li>
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <li class="nav-item">
+            <a class="dc-nav-link @Activo("Documentos")" asp-area="" asp-controller="Documentos" asp-action="Index">Mis documentos</a>
+        </li>
+    }
+</ul>

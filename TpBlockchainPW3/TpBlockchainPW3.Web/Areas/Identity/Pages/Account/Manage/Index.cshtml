@@ -1,0 +1,76 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Mi cuenta";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+
+<div class="dc-card mb-4">
+    <h2 class="dc-card-title">Datos de acceso</h2>
+    <dl class="dc-dl">
+        <div>
+            <dt>Email</dt>
+            <dd class="d-flex flex-wrap align-items-center gap-2">
+                <span class="text-break">@Model.Email</span>
+                @if (Model.EmailConfirmado)
+                {
+                    <span class="dc-status is-ok">Confirmado</span>
+                }
+                else
+                {
+                    <span class="dc-status is-pending">Sin confirmar</span>
+                }
+            </dd>
+        </div>
+        <div>
+            <dt>Contraseña</dt>
+            <dd class="d-flex justify-content-between align-items-center gap-2">
+                <span class="dc-mono text-secondary">••••••••</span>
+                <a asp-page="./ChangePassword" class="btn btn-sm btn-outline-secondary">Cambiar</a>
+            </dd>
+        </div>
+    </dl>
+</div>
+
+<div class="dc-card">
+    <div class="d-flex justify-content-between align-items-center gap-3 mb-3">
+        <h2 class="dc-card-title mb-0">Actividad como emisor</h2>
+        <a asp-area="" asp-controller="Documentos" asp-action="Index" class="small text-decoration-none">
+            Ver mis documentos <i class="bi bi-arrow-right dc-arrow"></i>
+        </a>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-sm-4">
+            <div class="dc-stat">
+                <span class="dc-stat-value">@Model.TotalDocumentos</span>
+                <span class="dc-stat-label">Documentos cargados</span>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="dc-stat">
+                <span class="dc-stat-value text-success">@Model.Registrados</span>
+                <span class="dc-stat-label">Registrados en la blockchain</span>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="dc-stat">
+                <span class="dc-stat-value @(Model.SinRegistrar > 0 ? "text-warning" : "")">@Model.SinRegistrar</span>
+                <span class="dc-stat-label">Pendientes o con error</span>
+            </div>
+        </div>
+    </div>
+
+    <p class="dc-hint mt-3 mb-0">
+        @if (Model.UltimoDocumento is not null)
+        {
+            <text>Último documento cargado el @Model.UltimoDocumento.Value.ToLocalTime().ToString("dd/MM/yyyy 'a las' HH:mm").</text>
+        }
+        else
+        {
+            <text>Todavía no cargaste documentos. <a asp-area="" asp-controller="Documentos" asp-action="Subir">Subí el primero</a>.</text>
+        }
+    </p>
+</div>

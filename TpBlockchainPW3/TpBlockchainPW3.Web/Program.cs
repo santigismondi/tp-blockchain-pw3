@@ -14,8 +14,24 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddControllersWithViews();
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddErrorDescriber<TpBlockchainPW3.Web.Areas.Identity.IdentityErrorDescriberEs>(); // errores de Identity en español
+builder.Services.AddControllersWithViews(options =>
+{
+    // Mensajes de validación genéricos de ASP.NET en español (valen también para las Razor Pages de Identity)
+    var mensajes = options.ModelBindingMessageProvider;
+    mensajes.SetValueMustNotBeNullAccessor(_ => "Este campo es obligatorio.");
+    mensajes.SetMissingBindRequiredValueAccessor(campo => $"Falta el valor de «{campo}».");
+    mensajes.SetMissingKeyOrValueAccessor(() => "Falta un valor obligatorio.");
+    mensajes.SetMissingRequestBodyRequiredValueAccessor(() => "Faltan los datos del formulario.");
+    mensajes.SetAttemptedValueIsInvalidAccessor((valor, campo) => $"«{valor}» no es un valor válido para {campo}.");
+    mensajes.SetNonPropertyAttemptedValueIsInvalidAccessor(valor => $"«{valor}» no es un valor válido.");
+    mensajes.SetUnknownValueIsInvalidAccessor(campo => $"El valor ingresado en {campo} no es válido.");
+    mensajes.SetNonPropertyUnknownValueIsInvalidAccessor(() => "El valor ingresado no es válido.");
+    mensajes.SetValueIsInvalidAccessor(valor => $"«{valor}» no es válido.");
+    mensajes.SetValueMustBeANumberAccessor(campo => $"{campo} tiene que ser un número.");
+    mensajes.SetNonPropertyValueMustBeANumberAccessor(() => "El valor tiene que ser un número.");
+});
 
 builder.Services.AddScoped<IPdfService, QuestPdfService>();
 builder.Services.Configure<BlockchainOptions>(builder.Configuration.GetSection(BlockchainOptions.Seccion));

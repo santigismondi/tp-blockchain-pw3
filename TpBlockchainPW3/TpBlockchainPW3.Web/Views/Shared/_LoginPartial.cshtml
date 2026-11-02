@@ -2,25 +2,70 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
-<ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Mi cuenta">Hola, @User.Identity?.Name</a>
-    </li>
-    <li class="nav-item">
-        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button type="submit" class="nav-link btn btn-link">Cerrar sesión</button>
-        </form>
-    </li>
+    var nombre = User.Identity?.Name ?? "";
+    var inicial = nombre.Length > 0 ? nombre[0].ToString() : "?";
+    var volverAlInicio = Url.Action("Index", "Home", new { area = "" });
+
+    @* Escritorio: botón de acción + menú desplegable *@
+    <div class="d-none d-lg-flex align-items-center gap-3">
+        <a class="btn btn-primary btn-sm" asp-area="" asp-controller="Documentos" asp-action="Subir">
+            <i class="bi bi-plus-lg"></i> Subir documento
+        </a>
+        <div class="dropdown">
+            <button class="dc-user-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Menú de @nombre">
+                <span class="dc-avatar">@inicial</span>
+                <i class="bi bi-chevron-down small"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end mt-2">
+                <li><h6 class="dropdown-header text-truncate">@nombre</h6></li>
+                <li>
+                    <a class="dropdown-item" asp-area="" asp-controller="Documentos" asp-action="Index">
+                        <i class="bi bi-folder2"></i> Mis documentos
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">
+                        <i class="bi bi-person"></i> Mi cuenta
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@volverAlInicio">
+                        <button type="submit" class="dropdown-item">
+                            <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    @* Tablet y celular: todo visible dentro del panel lateral *@
+    <div class="d-lg-none d-flex flex-column gap-3 mt-auto">
+        <a class="btn btn-primary w-100" asp-area="" asp-controller="Documentos" asp-action="Subir">
+            <i class="bi bi-plus-lg"></i> Subir documento
+        </a>
+        <div class="dc-user-card">
+            <span class="dc-avatar">@inicial</span>
+            <div class="flex-grow-1 text-truncate">
+                <div class="small text-secondary">Sesión iniciada</div>
+                <div class="text-truncate fw-medium">@nombre</div>
+            </div>
+        </div>
+        <div class="d-flex gap-2">
+            <a class="btn btn-outline-secondary flex-fill" asp-area="Identity" asp-page="/Account/Manage/Index">Mi cuenta</a>
+            <form class="flex-fill d-flex" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@volverAlInicio">
+                <button type="submit" class="btn btn-outline-secondary flex-fill">Cerrar sesión</button>
+            </form>
+        </div>
+    </div>
 }
 else
 {
-    <li class="nav-item">
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Registrarse</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Iniciar sesión</a>
-    </li>
+    <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2 gap-lg-3 mt-auto mt-lg-0">
+        <a class="btn btn-link px-lg-0 order-2 order-lg-1" asp-area="Identity" asp-page="/Account/Login">Iniciar sesión</a>
+        <a class="btn btn-primary order-1 order-lg-2" asp-area="Identity" asp-page="/Account/Register">Crear cuenta</a>
+    </div>
 }
-</ul>

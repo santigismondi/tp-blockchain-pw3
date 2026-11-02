@@ -1,0 +1,28 @@
+@page
+@model PersonalDataModel
+@{
+    ViewData["Title"] = "Datos y privacidad";
+    ViewData["ActivePage"] = ManageNavPages.PersonalData;
+}
+
+<div class="dc-card mb-4">
+    <h2 class="dc-card-title">Descargar mis datos</h2>
+    <p class="text-secondary">
+        Un archivo JSON con los datos de tu cuenta y la lista de documentos que registraste
+        (código, título, fecha, huella y transacción).
+    </p>
+    <form asp-page="DownloadPersonalData" method="post">
+        <button class="btn btn-outline-secondary" type="submit">
+            <i class="bi bi-download"></i> Descargar mis datos
+        </button>
+    </form>
+</div>
+
+<div class="dc-card dc-danger-zone">
+    <h2 class="dc-card-title">Eliminar cuenta</h2>
+    <p class="text-secondary">
+        Se borran tu cuenta y los documentos de tu panel. Las huellas que ya están en la blockchain
+        no se pueden borrar: esos archivos van a seguir verificándose como auténticos.
+    </p>
+    <a asp-page="DeletePersonalData" class="btn btn-outline-danger">Eliminar mi cuenta</a>
+</div>

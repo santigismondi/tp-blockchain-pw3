@@ -1,0 +1,43 @@
+@page
+@model RegisterModel
+
+@{
+    ViewData["Title"] = "Crear cuenta";
+}
+
+<div class="dc-page dc-auth">
+    <h1 class="dc-title">Creá tu cuenta</h1>
+    <p class="dc-lead mb-4">Con una cuenta podés registrar documentos en la blockchain. Para verificar no hace falta.</p>
+
+    <div class="dc-card">
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <div asp-validation-summary="ModelOnly" role="alert"></div>
+
+            <div class="mb-3">
+                <label asp-for="Input.Email" class="form-label">Email</label>
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="nombre@ejemplo.com" />
+                <span asp-validation-for="Input.Email"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Input.Password" class="form-label">Contraseña</label>
+                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
+                <div class="dc-hint mt-1">Mínimo 6 caracteres, con mayúscula, minúscula, número y símbolo.</div>
+                <span asp-validation-for="Input.Password"></span>
+            </div>
+            <div class="mb-4">
+                <label asp-for="Input.ConfirmPassword" class="form-label">Repetí la contraseña</label>
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
+                <span asp-validation-for="Input.ConfirmPassword"></span>
+            </div>
+            <button id="registerSubmit" type="submit" class="btn btn-dark btn-lg w-100">Crear cuenta</button>
+        </form>
+    </div>
+
+    <p class="text-center small text-secondary mt-4">
+        ¿Ya tenés cuenta? <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">Iniciá sesión</a>
+    </p>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

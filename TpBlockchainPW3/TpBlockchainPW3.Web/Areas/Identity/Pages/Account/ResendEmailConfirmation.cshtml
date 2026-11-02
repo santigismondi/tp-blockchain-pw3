@@ -1,0 +1,38 @@
+@page
+@model ResendEmailConfirmationModel
+@{
+    ViewData["Title"] = "Reenviar confirmación";
+}
+
+<div class="dc-page dc-auth">
+    <h1 class="dc-title">Reenviar confirmación</h1>
+    <p class="dc-lead mb-4">Te mandamos de nuevo el enlace para confirmar tu email.</p>
+
+    @if (Model.Enviado)
+    {
+        <div class="alert alert-success mb-4" role="status">
+            <i class="bi bi-envelope-check"></i>
+            <div>Si la cuenta existe y todavía no está confirmada, te enviamos un nuevo enlace.</div>
+        </div>
+    }
+
+    <div class="dc-card">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" role="alert"></div>
+            <div class="mb-4">
+                <label asp-for="Input.Email" class="form-label">Email</label>
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="nombre@ejemplo.com" />
+                <span asp-validation-for="Input.Email"></span>
+            </div>
+            <button type="submit" class="btn btn-dark btn-lg w-100">Reenviar</button>
+        </form>
+    </div>
+
+    <p class="text-center small text-secondary mt-4">
+        <a asp-page="./Login">Volver a iniciar sesión</a>
+    </p>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
