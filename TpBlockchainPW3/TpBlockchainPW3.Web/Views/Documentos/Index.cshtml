@@ -8,11 +8,16 @@
     <div class="dc-page-header">
         <div>
             <h1 class="dc-title">Mis documentos</h1>
-            <p class="dc-lead">Todo lo que registraste en la blockchain, con su estado y su certificado.</p>
+            <p class="dc-lead">Todo lo que registraste en la blockchain, con su estado y su huella.</p>
         </div>
-        <a asp-action="Subir" class="btn btn-primary">
-            <i class="bi bi-plus-lg"></i> Subir documento
-        </a>
+        <div class="d-flex flex-wrap gap-2">
+            <a asp-action="NuevoCertificado" class="btn btn-outline-secondary">
+                <i class="bi bi-award"></i> Generar certificado
+            </a>
+            <a asp-action="Subir" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> Subir documento
+            </a>
+        </div>
     </div>
 
     @if (!Model.Any())
@@ -20,8 +25,11 @@
         <div class="dc-card dc-empty">
             <i class="bi bi-folder2-open"></i>
             <h2 class="h5 mt-3 mb-1">Todavía no registraste documentos</h2>
-            <p class="text-secondary mb-4">Subí el primero y vas a obtener su huella y su comprobante en la blockchain.</p>
-            <a asp-action="Subir" class="btn btn-primary">Subir mi primer documento</a>
+            <p class="text-secondary mb-4">Subí un archivo o generá un certificado: vas a obtener su huella y su registro en la blockchain.</p>
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+                <a asp-action="Subir" class="btn btn-primary">Subir un documento</a>
+                <a asp-action="NuevoCertificado" class="btn btn-outline-secondary">Generar un certificado</a>
+            </div>
         </div>
     }
     else
@@ -51,8 +59,8 @@
                                 <td><partial name="_EstadoBadge" model="item.Estado" /></td>
                                 <td class="text-end text-nowrap">
                                     <a asp-action="Detalle" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Ver detalle</a>
-                                    <a asp-action="GenerarCertificado" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary" title="Descargar certificado en PDF">
-                                        <i class="bi bi-file-earmark-pdf"></i> Certificado
+                                    <a asp-action="Descargar" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary" title="Descargar el archivo registrado">
+                                        <i class="bi bi-download"></i> Descargar
                                     </a>
                                 </td>
                             </tr>

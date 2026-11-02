@@ -19,11 +19,9 @@
             </div>
         </div>
         <div class="d-flex flex-wrap gap-2">
-            <a asp-action="Descargar" asp-route-id="@Model.Id" class="btn btn-outline-secondary">
-                <i class="bi bi-download"></i> Descargar archivo
-            </a>
-            <a asp-action="GenerarCertificado" asp-route-id="@Model.Id" class="btn btn-primary">
-                <i class="bi bi-file-earmark-pdf"></i> Certificado
+            @* El archivo descargado es exactamente el registrado: su huella coincide con la de la blockchain *@
+            <a asp-action="Descargar" asp-route-id="@Model.Id" class="btn btn-primary">
+                <i class="bi bi-download"></i> @(Model.Tipo == TpBlockchainPW3.Web.Models.TipoDocumento.Certificado ? "Descargar certificado" : "Descargar archivo")
             </a>
         </div>
     </div>
@@ -46,6 +44,32 @@
                         <dt>Tipo</dt>
                         <dd>@Model.Tipo</dd>
                     </div>
+                    @if (!string.IsNullOrEmpty(Model.NombreDestinatario))
+                    {
+                        <div>
+                            <dt>Destinatario</dt>
+                            <dd>
+                                @Model.NombreDestinatario
+                                @if (!string.IsNullOrEmpty(Model.DniDestinatario))
+                                {
+                                    <span class="text-secondary">· DNI @Model.DniDestinatario</span>
+                                }
+                            </dd>
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Materia))
+                    {
+                        <div>
+                            <dt>Materia</dt>
+                            <dd>
+                                @Model.Materia
+                                @if (Model.Nota != null)
+                                {
+                                    <span class="text-secondary">· Nota @Model.Nota.Value.ToString("0.##")</span>
+                                }
+                            </dd>
+                        </div>
+                    }
                     <div>
                         <dt>Archivo</dt>
                         <dd class="text-break">@Model.NombreArchivo</dd>

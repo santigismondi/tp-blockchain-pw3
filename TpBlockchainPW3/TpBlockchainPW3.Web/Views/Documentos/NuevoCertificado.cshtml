@@ -1,0 +1,61 @@
+@model TpBlockchainPW3.Web.ViewModels.GenerarCertificadoViewModel
+@{
+    ViewData["Title"] = "Generar certificado";
+}
+
+<div class="dc-page dc-narrow">
+    <a asp-action="Index" class="small text-secondary text-decoration-none d-inline-flex align-items-center gap-1 mb-3">
+        <i class="bi bi-arrow-left"></i> Mis documentos
+    </a>
+    <h1 class="dc-title">Generar un certificado</h1>
+    <p class="dc-lead mb-4">Armamos el PDF con estos datos, calculamos su huella y lo registramos en la blockchain. El código de verificación va impreso al pie.</p>
+
+    <div class="dc-card">
+        <form asp-action="NuevoCertificado" method="post" data-cargando="Generando y registrando…">
+            <div asp-validation-summary="ModelOnly"></div>
+
+            <div class="mb-4">
+                <label asp-for="Nombre" class="form-label"></label>
+                <input asp-for="Nombre" class="form-control" placeholder="Ej.: Ana Gómez" autocomplete="off" />
+                <span asp-validation-for="Nombre"></span>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-sm-6">
+                    <label asp-for="Dni" class="form-label"></label>
+                    <input asp-for="Dni" class="form-control dc-mono" inputmode="numeric" maxlength="8" placeholder="12345678" autocomplete="off" />
+                    <span asp-validation-for="Dni"></span>
+                </div>
+                <div class="col-sm-6">
+                    <label asp-for="Fecha" class="form-label">Fecha de emisión</label>
+                    <input asp-for="Fecha" class="form-control" type="date" max="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                    <span asp-validation-for="Fecha"></span>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-sm-8">
+                    <label asp-for="Materia" class="form-label"></label>
+                    <input asp-for="Materia" class="form-control" placeholder="Ej.: Programación Web 3" />
+                    <span asp-validation-for="Materia"></span>
+                </div>
+                <div class="col-sm-4">
+                    <label asp-for="Nota" class="form-label"></label>
+                    <input asp-for="Nota" class="form-control" type="number" min="1" max="10" placeholder="1 a 10" />
+                    <span asp-validation-for="Nota"></span>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column-reverse flex-sm-row justify-content-end gap-2 mt-4 pt-4 border-top">
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">
+                    Generar y registrar <i class="bi bi-arrow-right dc-arrow"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
