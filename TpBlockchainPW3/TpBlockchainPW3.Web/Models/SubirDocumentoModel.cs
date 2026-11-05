@@ -20,13 +20,17 @@ namespace TpBlockchainPW3.Web.Models
         public TipoDocumento Tipo { get; set; } = TipoDocumento.Externo;
 
         [Display(Name = "Nombre del Destinatario")]
+        [StringLength(150, ErrorMessage = "Puede tener hasta {1} caracteres.")]
         public string? NombreDestinatario { get; set; }
 
         [Display(Name = "DNI del Destinatario")]
+        [RegularExpression(@"^\d{7,8}$", ErrorMessage = "El DNI debe tener 7 u 8 números.")]
         public string? DniDestinatario { get; set; }
 
+        [StringLength(150, ErrorMessage = "Puede tener hasta {1} caracteres.")]
         public string? Materia { get; set; }
 
+        [Range(0, 10, ErrorMessage = "La nota debe estar entre 0 y 10.")]
         public decimal? Nota { get; set; }
     }
 

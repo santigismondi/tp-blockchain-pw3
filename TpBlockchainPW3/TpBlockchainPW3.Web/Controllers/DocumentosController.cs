@@ -5,7 +5,6 @@ using TpBlockchainPW3.Web.Models;
 using TpBlockchainPW3.Web.Services.Interfaces;
 using TpBlockchainPW3.Web.ViewModels;
 
-
 namespace TpBlockchainPW3.Web.Controllers
 {
     [Authorize]
@@ -58,11 +57,16 @@ namespace TpBlockchainPW3.Web.Controllers
                 contenidoArchivo = memoryStream.ToArray();
             }
 
+            // Path.GetFileName descarta rutas que mandan algunos navegadores viejos
+            var nombreArchivo = Path.GetFileName(model.Archivo.FileName);
+            if (nombreArchivo.Length > 100)
+                nombreArchivo = nombreArchivo[^100..]; // los últimos 100: conserva la extensión
+
             var nuevoDoc = new NuevoDocumento
             {
                 Titulo = model.Titulo,
                 Tipo = model.Tipo,
-                NombreArchivo = model.Archivo.FileName,
+                NombreArchivo = nombreArchivo,
                 Contenido = contenidoArchivo,
                 EmisorId = emisorId,
                 NombreDestinatario = model.NombreDestinatario,
@@ -73,23 +77,27 @@ namespace TpBlockchainPW3.Web.Controllers
 
             var resultado = await _documentoService.RegistrarAsync(nuevoDoc);
 
-            if (!resultado.Exito && resultado.Documento == null)
+            // Sin documento, o el duplicado pertenece a otro emisor: error en el mismo formulario
+            if (resultado.Documento is null || resultado.Documento.EmisorId != emisorId)
             {
-                ModelState.AddModelError(string.Empty, resultado.Mensaje);
+                ModelState.AddModelError(string.Empty, resultado.Documento is null
+                    ? resultado.Mensaje
+                    : "Este archivo ya fue registrado por otro emisor.");
                 return View(model);
             }
 
-            TempData["MensajeExito"] = resultado.Mensaje;
+            // Éxito → verde. Duplicado propio o falla de blockchain → rojo.
+            TempData[resultado.Exito ? "MensajeExito" : "MensajeError"] = resultado.Mensaje;
 
-            return RedirectToAction("Detalle", new { id = resultado.Documento!.Id });
+            return RedirectToAction(nameof(Detalle), new { id = resultado.Documento.Id });
         }
-
 
         [HttpGet]
         public IActionResult NuevoCertificado()
         {
             return View(new GenerarCertificadoViewModel { Fecha = DateTime.Today });
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> NuevoCertificado(GenerarCertificadoViewModel model)
@@ -119,7 +127,7 @@ namespace TpBlockchainPW3.Web.Controllers
             // 3. Esos mismos bytes se hashean y se guardan
             var resultado = await _documentoService.RegistrarAsync(new NuevoDocumento
             {
-                Titulo = $"Certificado de {model.Materia} - {model.Nombre}",
+                Titulo = $"Certificado - {model.Nombre}", // máx. 14 + 100 = 114 caracteres
                 Tipo = TipoDocumento.Certificado,
                 NombreArchivo = $"Certificado_{codigo}.pdf",
                 Contenido = pdfBytes,
@@ -131,42 +139,19 @@ namespace TpBlockchainPW3.Web.Controllers
                 Codigo = codigo
             });
 
-            if (!resultado.Exito && resultado.Documento == null)
+            // Sin documento, o el duplicado pertenece a otro emisor: error en el mismo formulario
+            if (resultado.Documento is null || resultado.Documento.EmisorId != emisorId)
             {
-                ModelState.AddModelError(string.Empty, resultado.Mensaje);
+                ModelState.AddModelError(string.Empty, resultado.Documento is null
+                    ? resultado.Mensaje
+                    : "Este archivo ya fue registrado por otro emisor.");
                 return View(model);
             }
 
-            TempData["MensajeExito"] = resultado.Mensaje;
+            // Éxito → verde. Duplicado propio o falla de blockchain → rojo.
+            TempData[resultado.Exito ? "MensajeExito" : "MensajeError"] = resultado.Mensaje;
 
-            return RedirectToAction(nameof(Detalle), new { id = resultado.Documento!.Id });
-        }
-        
-        [HttpGet]
-        public async Task<IActionResult> GenerarCertificado(int id)
-        {
-            var emisorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(emisorId)) return Unauthorized();
-
-            var documento = await _documentoService.ObtenerAsync(id, emisorId);
-            if (documento == null)
-            {
-                return NotFound();
-            }
-
-            var certModel = new CertificateModel
-            {
-                FullName = documento.Titulo,
-                Dni = "---",
-                Subject = documento.Titulo,
-                Grade = documento.Nota?.ToString() ?? "Aprobado",
-                Date = documento.FechaCreacion,
-                Code = documento.Codigo
-            };
-
-            var pdfBytes = _pdfService.GenerateCertificate(certModel);
-
-            return File(pdfBytes, "application/pdf", $"Certificado_{documento.Codigo}.pdf");
+            return RedirectToAction(nameof(Detalle), new { id = resultado.Documento.Id });
         }
 
         [HttpGet]
@@ -201,15 +186,12 @@ namespace TpBlockchainPW3.Web.Controllers
                 return NotFound("El archivo no contiene datos almacenados.");
             }
 
-           var nombre = documento.NombreArchivo ?? $"documento_{documento.Codigo}.dat";
+            var nombre = documento.NombreArchivo ?? $"documento_{documento.Codigo}.dat";
             var tipoContenido = nombre.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase)
                 ? "application/pdf"
                 : "application/octet-stream";
 
             return File(documento.Contenido, tipoContenido, nombre);
         }
-       }
-
-      
-   
     }
+}
