@@ -19,10 +19,4 @@
     <PackageReference Include="Nethereum.Web3" Version="7.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\Interfaces\" />
-    <Folder Include="Storage\" />
-    <Folder Include="Options\" />
-  </ItemGroup>
-
 </Project>
