@@ -1,4 +1,18 @@
-﻿IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+﻿-- =============================================
+-- TP Blockchain PW3 - Grupo 7 (UNLaM)
+-- Crea la base TpBlockchainPW3 con todas sus tablas.
+-- Generado con: dotnet ef migrations script --idempotent
+-- Se puede ejecutar mas de una vez sin romper nada.
+-- =============================================
+
+IF DB_ID(N'TpBlockchainPW3') IS NULL
+    CREATE DATABASE [TpBlockchainPW3];
+GO
+
+USE [TpBlockchainPW3];
+GO
+
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
 BEGIN
     CREATE TABLE [__EFMigrationsHistory] (
         [MigrationId] nvarchar(150) NOT NULL,
